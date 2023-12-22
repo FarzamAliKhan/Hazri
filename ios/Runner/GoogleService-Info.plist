@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAmToEi3jnK1zwvdn5fXqCNhGvz1jYqWiQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1045697339718</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.hazri2</string>
+	<key>PROJECT_ID</key>
+	<string>hazri-55e1f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hazri-55e1f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1045697339718:ios:d05b40effac0feb7cc8547</string>
+</dict>
+</plist>
