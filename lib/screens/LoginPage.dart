@@ -155,10 +155,10 @@ class _LoginPageState extends State<LoginPage> {
                             UserCredential userCredential =
                                 await _auth.signInWithEmailAndPassword(
                                     email: _email, password: _password);
-      
+
                             if (userCredential.user != null) {
                               String userId = userCredential.user!.uid;
-      
+
                               DocumentSnapshot userDoc = await _firestore
                                   .collection('users')
                                   .doc(userId)
@@ -166,30 +166,30 @@ class _LoginPageState extends State<LoginPage> {
                               if (userDoc.exists) {
                                 UserModel user = UserModel.fromJson(
                                     userDoc.data() as Map<String, dynamic>);
-      
+
                                 // Navigate to appropriate screen based on role
                                 // For example:
                                 if (user.role == 'Student') {
-                               
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const Student()));
+                                               Student(uid: userCredential.user!.uid,)));
                                 } else if (user.role == 'Teacher') {
-                                 
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const Teacher()));
+                                               Teacher(
+                                                uid: userCredential.user!.uid,
+                                              )));
                                   // Navigate to TeacherScreen
                                 } else if (user.role == 'Admin') {
-                               
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Admin()));
+                                          builder: (context) =>  Admin(
+                                              uid: userCredential.user!.uid)));
                                   // Navigate to AdminScreen
                                 }
                               }
@@ -260,6 +260,7 @@ class UserModel {
   final String id;
   final String email;
   final String role;
+ 
 
   UserModel({required this.id, required this.email, required this.role});
 
