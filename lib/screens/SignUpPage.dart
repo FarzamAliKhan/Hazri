@@ -1,14 +1,16 @@
+// @dart=2.9
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/clipper.dart';
 import 'package:hazri2/global/clipper2.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  const SignUpPage({Key key}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -51,7 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       painter: PSCustomPainter(),
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     top: 220,
                     left: 30,
                     child: Column(
@@ -103,11 +105,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(
-                                    color: Color(0xfffca148), width: 3.0),
+                                    color: Color(0xff9DD1F1), width: 3.0),
                               ),
                             ),
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value.isEmpty) {
                                 return 'Please enter your name';
                               }
                               return null;
@@ -118,7 +120,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               });
                             },
                           ),
-                          const SizedBox(height: 15,),
+                          const SizedBox(
+                            height: 15,
+                          ),
                           TextFormField(
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
@@ -135,14 +139,13 @@ class _SignUpPageState extends State<SignUpPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(
-                                    color: Color(0xfffca148), width: 3.0),
+                                    color: Color(0xff9DD1F1), width: 3.0),
                               ),
                             ),
-                            validator: ( value) {
-                              if (value!.isEmpty) {
+                            validator: (value) {
+                              if (value.isEmpty) {
                                 return 'Please enter your roll number';
-                              } else if (value.length < 2 ||
-                                  value.length > 3) {
+                              } else if (value.length < 2 || value.length > 3) {
                                 return "please enter correct roll number";
                               }
 
@@ -173,11 +176,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(
-                                    color: Color(0xfffca148), width: 3.0),
+                                    color: Color(0xff9DD1F1), width: 3.0),
                               ),
                             ),
                             validator: (value) {
-                              if (value!.isEmpty || !value.contains('@')) {
+                              if (value.isEmpty || !value.contains('@')) {
                                 return 'Please enter your email';
                               }
                               return null;
@@ -209,11 +212,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(
-                                    color: Color(0xfffca148), width: 3.0),
+                                    color: Color(0xff9DD1F1), width: 3.0),
                               ),
                             ),
                             validator: (value) {
-                              if (value!.isEmpty || value.length < 6) {
+                              if (value.isEmpty || value.length < 6) {
                                 return 'Please enter your password';
                               }
                               return null;
@@ -245,11 +248,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 borderSide: const BorderSide(
-                                    color: Color(0xfffca148), width: 3.0),
+                                    color: Color(0xff9DD1F1), width: 3.0),
                               ),
                             ),
                             validator: (value) {
-                              if (value!.isEmpty || value.length < 6) {
+                              if (value.isEmpty || value.length < 6) {
                                 return 'Please confirm your password';
                               }
                               return null;
@@ -288,7 +291,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: Color(0xfffca148), width: 3),
+                                    color: Color(0xff9DD1F1), width: 3),
                               ),
                             ),
                           ),
@@ -297,7 +300,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
+                              if (_formKey.currentState.validate()) {
                                 try {
                                   UserCredential userCredential = await _auth
                                       .createUserWithEmailAndPassword(
@@ -305,14 +308,14 @@ class _SignUpPageState extends State<SignUpPage> {
 
                                   if (userCredential.user != null) {
                                     UserModel user = UserModel(
-                                        id: userCredential.user!.uid,
+                                        id: userCredential.user.uid,
                                         email: _email,
                                         role: _selectedRole,
                                         name: _name,
                                         rollNo: _rollNo);
                                     await _firestore
                                         .collection('users')
-                                        .doc(userCredential.user!.uid)
+                                        .doc(userCredential.user.uid)
                                         .set(user.toJson());
 
                                     // Navigate to appropriate screen based on role
@@ -330,17 +333,19 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xfff7b858),
+                              backgroundColor: const Color(0xff9DD1F1),
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
-                            child: const Padding(
+                            child:  Padding(
                               padding: EdgeInsets.all(12.0),
                               child: Text(
                                 "Sign Up",
-                                style: TextStyle(fontSize: 16.0),
+                                style: GoogleFonts.ubuntu(
+                  color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+            
                               ),
                             ),
                           )
@@ -372,7 +377,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
-                                color: Color(0xfffca148)),
+                                color: Color(0xff9DD1F1)),
                           ),
                         ),
                       ],
@@ -396,13 +401,19 @@ class UserModel {
   final String rollNo;
 
   UserModel(
-      {required this.id,
-      required this.email,
-      required this.role,
-      required this.name,
-      required this.rollNo});
+      {@required this.id,
+      @required this.email,
+      @required this.role,
+      @required this.name,
+      @required this.rollNo});
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'email': email, 'role': role, 'name': name, 'rollNo':rollNo};
+    return {
+      'id': id,
+      'email': email,
+      'role': role,
+      'name': name,
+      'rollNo': rollNo
+    };
   }
 }

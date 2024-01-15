@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,7 +8,7 @@ class DashComp extends StatelessWidget {
   final Icon icon;
   final Color color;
   const DashComp(
-      {super.key, required this.name, required this.icon, required this.color});
+      {Key key, @required this.name, @required this.icon, @required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class DashWelcome extends StatelessWidget {
   final String name;
   final Color color;
 
-  const DashWelcome({super.key, required this.name, required this.color});
+  const DashWelcome({Key key, @required this.name, @required this.color});
 
   @override
   Widget build(BuildContext context) {

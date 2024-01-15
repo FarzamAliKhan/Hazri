@@ -1,7 +1,9 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/clipper.dart';
 import 'package:hazri2/global/clipper2.dart';
 import 'package:hazri2/screens/SignUpPage.dart';
@@ -10,7 +12,7 @@ import 'package:hazri2/screens/student.dart';
 import 'package:hazri2/screens/teacher.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -46,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                     painter: PSCustomPainter(),
                   ),
                 ),
-                const Positioned(
+                Positioned(
                   top: 220,
                   left: 30,
                   child: Column(
@@ -95,11 +97,11 @@ class _LoginPageState extends State<LoginPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                              color: Color(0xfffca148), width: 3.0),
+                              color: Color(0xff9DD1F1), width: 3.0),
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty || !value.contains('@')) {
+                        if (value.isEmpty || !value.contains('@')) {
                           return 'Please enter your email';
                         }
                         return null;
@@ -130,11 +132,11 @@ class _LoginPageState extends State<LoginPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                              color: Color(0xfffca148), width: 3.0),
+                              color: Color(0xff9DD1F1), width: 3.0),
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty || value.length < 6) {
+                        if (value.isEmpty || value.length < 6) {
                           return 'Please enter your password';
                         }
                         return null;
@@ -150,14 +152,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState.validate()) {
                           try {
                             UserCredential userCredential =
                                 await _auth.signInWithEmailAndPassword(
                                     email: _email, password: _password);
 
                             if (userCredential.user != null) {
-                              String userId = userCredential.user!.uid;
+                              String userId = userCredential.user.uid;
 
                               DocumentSnapshot userDoc = await _firestore
                                   .collection('users')
@@ -173,23 +175,23 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                               Student(uid: userCredential.user!.uid,)));
+                                          builder: (context) => Student(
+                                                uid: userCredential.user.uid,
+                                              )));
                                 } else if (user.role == 'Teacher') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                               Teacher(
-                                                uid: userCredential.user!.uid,
+                                          builder: (context) => Teacher(
+                                                uid: userCredential.user.uid,
                                               )));
                                   // Navigate to TeacherScreen
                                 } else if (user.role == 'Admin') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>  Admin(
-                                              uid: userCredential.user!.uid)));
+                                          builder: (context) => Admin(
+                                              uid: userCredential.user.uid)));
                                   // Navigate to AdminScreen
                                 }
                               }
@@ -201,17 +203,19 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xfff7b858),
+                        backgroundColor: const Color(0xff9DD1F1),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      child: const Padding(
+                      child:  Padding(
                         padding: EdgeInsets.all(12.0),
                         child: Text(
                           "Log In",
-                          style: TextStyle(fontSize: 16.0),
+                          style: GoogleFonts.ubuntu(
+                  color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+            
                         ),
                       ),
                     ),
@@ -242,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xfffca148)),
+                            color: Color(0xff9DD1F1)),
                       ),
                     ),
                   ],
@@ -260,9 +264,8 @@ class UserModel {
   final String id;
   final String email;
   final String role;
- 
 
-  UserModel({required this.id, required this.email, required this.role});
+  UserModel({@required this.id, @required this.email, @required this.role});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

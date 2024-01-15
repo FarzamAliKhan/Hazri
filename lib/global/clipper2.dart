@@ -1,10 +1,12 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 
 class PSCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint0 = Paint()
-      ..color = const Color(0xffFACE88)
+      ..color = Color.fromARGB(255, 179, 219, 243)
       ..style = PaintingStyle.fill
       ..strokeWidth = 1;
 

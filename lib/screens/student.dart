@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +10,14 @@ import 'package:hazri2/screens/LoginPage.dart';
 
 class Student extends StatefulWidget {
   final String uid;
-  const Student({super.key, required this.uid});
+  const Student({Key key, @required this.uid}) : super(key: key);
 
   @override
   State<Student> createState() => _StudentState();
 }
 
 class _StudentState extends State<Student> {
-  late Future<DocumentSnapshot<Map<String, dynamic>>> userData;
+   Future<DocumentSnapshot<Map<String, dynamic>>> userData;
 
   @override
   void initState() {
@@ -66,7 +68,7 @@ class _StudentState extends State<Student> {
                     return Text("Error: ${snapshot.error}");
                   }
                   else{
-                  final userData = snapshot.data!.data()!;
+                  final userData = snapshot.data.data();
                   final userName = userData['name'];
                   return Column(
                     children: [

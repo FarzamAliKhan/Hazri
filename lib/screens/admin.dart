@@ -1,20 +1,26 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hazri2/face_recognition/view_label.dart';
 import 'package:hazri2/global/DashButton.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 
+import '../face_recognition/capture_attendance.dart';
+import 'package:hazri2/face_recognition/add_user.dart';
+
 class Admin extends StatefulWidget {
   final String uid;
-  const Admin({super.key, required this.uid});
+  const Admin({Key key, @required this.uid}) : super(key: key);
 
   @override
   State<Admin> createState() => _AdminState();
 }
 
 class _AdminState extends State<Admin> {
-  late Future<DocumentSnapshot<Map<String, dynamic>>> userData;
+  Future<DocumentSnapshot<Map<String, dynamic>>> userData;
 
   @override
   void initState() {
@@ -37,7 +43,7 @@ class _AdminState extends State<Admin> {
                   color: Colors.white, fontWeight: FontWeight.bold),
             ),
             automaticallyImplyLeading: false,
-            backgroundColor: const Color(0xff031927),
+            backgroundColor: const Color(0xff508AA8),
             centerTitle: true,
             shadowColor: Colors.blueGrey,
             leading: const Icon(
@@ -46,10 +52,7 @@ class _AdminState extends State<Admin> {
             ),
             actions: [
               IconButton(
-                icon: const Icon(
-                  Icons.logout_outlined,
-                  color: Colors.white,
-                ),
+                icon: const FaIcon(FontAwesomeIcons.rightFromBracket, color: Colors.white,),
                 onPressed: () {
                   FirebaseAuth.instance.signOut().then((value) {
                     Navigator.push(
@@ -71,7 +74,7 @@ class _AdminState extends State<Admin> {
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  final userData = snapshot.data!.data()!;
+                  final userData = snapshot.data.data();
                   final userName = userData['name'];
                   return SingleChildScrollView(
                     scrollDirection: Axis.vertical,
@@ -79,7 +82,7 @@ class _AdminState extends State<Admin> {
                       children: [
                         DashWelcome(
                           name: '$userName!',
-                          color: const Color(0xff031927),
+                          color: const Color(0xff508AA8),
                         ),
                         const SizedBox(
                           height: 10,
@@ -91,7 +94,13 @@ class _AdminState extends State<Admin> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              const AddUser())));
+                                },
                                 child: const DashComp(
                                   name: "Add User",
                                   icon: Icon(
@@ -99,11 +108,13 @@ class _AdminState extends State<Admin> {
                                     color: Colors.white,
                                     size: 60,
                                   ),
-                                  color: Color(0xff031927),
+                                  color: Color(0xff508AA8),
                                 ),
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: ((context) => ViewLabel())));
+                                },
                                 child: const DashComp(
                                   name: "Manage User",
                                   icon: Icon(
@@ -111,7 +122,7 @@ class _AdminState extends State<Admin> {
                                     color: Colors.white,
                                     size: 60,
                                   ),
-                                  color: Color(0xff031927),
+                                  color: Color(0xff508AA8),
                                 ),
                               )
                             ],
@@ -134,7 +145,7 @@ class _AdminState extends State<Admin> {
                                     color: Colors.white,
                                     size: 60,
                                   ),
-                                  color: Color(0xff031927),
+                                  color: Color(0xff508AA8),
                                 ),
                               ),
                               InkWell(
@@ -146,7 +157,7 @@ class _AdminState extends State<Admin> {
                                     color: Colors.white,
                                     size: 60,
                                   ),
-                                  color: Color(0xff031927),
+                                  color: Color(0xff508AA8),
                                 ),
                               )
                             ],
@@ -169,7 +180,7 @@ class _AdminState extends State<Admin> {
                                     color: Colors.white,
                                     size: 60,
                                   ),
-                                  color: Color(0xff031927),
+                                  color: Color(0xff508AA8),
                                 ),
                               ),
                               InkWell(
@@ -181,7 +192,7 @@ class _AdminState extends State<Admin> {
                                     color: Colors.white,
                                     size: 60,
                                   ),
-                                  color: Color(0xff031927),
+                                  color: Color(0xff508AA8),
                                 ),
                               )
                             ],
