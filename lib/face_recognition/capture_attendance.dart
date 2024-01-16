@@ -8,6 +8,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiver/collection.dart';
@@ -20,6 +21,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'detector_painters.dart';
 import 'detector_utils.dart';
+import 'package:intl/intl.dart';
 
 enum Choice {
   view,
@@ -31,7 +33,10 @@ enum Choice {
 bool _landMarkFace = false;
 
 class CaptureAttendance extends StatefulWidget {
-  const CaptureAttendance({Key key}) : super(key: key);
+  final String teacherId;
+
+  const CaptureAttendance({Key key, @required this.teacherId})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CaptureAttendanceState();
@@ -220,13 +225,13 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
                 imglib.copyResize(croppedImage, width: 200, height: 200)));
 
             croppedImage = imglib.copyResizeCropSquare(croppedImage, size: 112);
-            // int startTime = new DateTime.now().millisecondsSinceEpoch;
+            int startTime = DateTime.now().millisecondsSinceEpoch;
             res = _recognizeFace(croppedImage);
             _faceName = res;
             //Judge the detected face for anti spoofing purpose
 
-            // int endTime = new DateTime.now().millisecondsSinceEpoch;
-            // print("Inference took ${endTime - startTime}ms");
+            int endTime = DateTime.now().millisecondsSinceEpoch;
+            print("Inference took ${endTime - startTime}ms");
             finalResults.add(res, _face);
           }
           setState(() {
@@ -277,11 +282,13 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
     return Container(
       constraints: const BoxConstraints.expand(),
       child: _camera == null
-          ?  Center(
+          ? Center(
               child: Text(
                 'Initializing Camera...',
                 style: GoogleFonts.ubuntu(
-                    color: const Color(0xff508AA8), fontWeight: FontWeight.bold, fontSize: 30),
+                    color: const Color(0xff508AA8),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
               ),
             )
           : Stack(
@@ -356,9 +363,13 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
             Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           FloatingActionButton(
             shape: const CircleBorder(),
-            backgroundColor: (_faceFound) ? const Color(0xff508AA8) : Colors.blueGrey[300],
-            child: const Icon(Icons.camera_sharp, color: Colors.white,),
-            onPressed: () {
+            backgroundColor:
+                (_faceFound) ? const Color(0xff508AA8) : Colors.blueGrey[300],
+            child: const Icon(
+              Icons.camera_sharp,
+              color: Colors.white,
+            ),
+            onPressed: () async {
               if (_faceFound) {
                 setState(() {
                   _camera = null;
@@ -374,17 +385,18 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
                         style: GoogleFonts.ubuntu(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
-                      
                       scrollable: true,
                       content: Column(
                         children: [
-                         const Divider(color: Colors.white,thickness: 2),
+                          const Divider(color: Colors.white, thickness: 2),
                           if (uniqueRecognizedFaceNames.isEmpty)
                             const Text('No faces recognized yet.'),
                           for (String faceName in uniqueRecognizedFaceNames)
                             if (faceName != "NOT RECOGNIZED")
                               ListTile(
-                                title: Text(faceName, style: GoogleFonts.ubuntu(
+                                title: Text(
+                                  faceName,
+                                  style: GoogleFonts.ubuntu(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -398,18 +410,24 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
                             _initializeCamera();
                             Navigator.pop(context);
                           },
-                          child:  Text('Close', style: GoogleFonts.ubuntu(
+                          child: Text(
+                            'Close',
+                            style: GoogleFonts.ubuntu(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            await markAttendance(widget.teacherId, 'SE-312',
+                                uniqueRecognizedFaceNames);
                             uniqueRecognizedFaceNames.clear();
-                           _initializeCamera();
+                            _initializeCamera();
                             Navigator.pop(context);
                           },
-                          child:  Text('Save', style: GoogleFonts.ubuntu(
+                          child: Text(
+                            'Save',
+                            style: GoogleFonts.ubuntu(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -427,6 +445,81 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
         ]));
   }
 
+  Future<void> markAttendance(
+      String teacherId, String courseCode, List<String> studentPresent) async {
+    try {
+      // Check if the provided teacherId matches the teacher field in the course document
+      DocumentSnapshot<Map<String, dynamic>> courseDoc = await FirebaseFirestore
+          .instance
+          .collection('attendance')
+          .doc(courseCode)
+          .get();
+
+      if (courseDoc.exists) {
+        String assignedTeacher = courseDoc.data()['teacher'];
+
+        if (assignedTeacher == teacherId) {
+          // TeacherId matches, proceed to create a new session
+          String newSessionDocumentId = DateTime.now().toIso8601String();
+
+          // Set the date and section fields automatically
+          String formattedDate =
+              DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now());
+          String section = 'B';
+
+          // Create a new session document
+          await FirebaseFirestore.instance
+              .collection('attendance')
+              .doc(courseCode)
+              .collection('session')
+              .doc(newSessionDocumentId)
+              .set({
+            'date': formattedDate,
+            'section': section,
+          });
+
+          DocumentReference<Map<String, dynamic>> sessionDocRef =
+              FirebaseFirestore.instance
+                  .collection('attendance')
+                  .doc(courseCode)
+                  .collection('session')
+                  .doc(newSessionDocumentId);
+
+          print(
+              'Attendance Initiated successfully for $formattedDate, Section: $section');
+
+          // Initialize the attendanceList with all students and default status
+          List<String> allStudents = [
+            'MARYAM - 74',
+            'FARZAM - 86',
+            'FAIQ - 95',
+            'ZEESHAN - 96'
+          ];
+          Map<String, dynamic> attendanceList = {};
+          for (String student in allStudents) {
+            attendanceList[student] = 'Absent'; // Default status is Absent
+          }
+
+          // Update the status of present students to 'Present'
+          for (String presentStudent in studentPresent) {
+            attendanceList[presentStudent] = 'Present';
+          }
+
+          // Update the attendanceList in the session document
+          await sessionDocRef.update({'attendanceList': attendanceList});
+
+          print('Attendance data written successfully!');
+        } else {
+          print('Teacher not assigned to this course');
+        }
+      } else {
+        print('Course not found');
+      }
+    } catch (error) {
+      print('Error marking attendance: $error');
+    }
+  }
+
   void _addRecognizedFaceName(String faceName) {
     setState(() {
       recognizedFaceNames.add(faceName);
@@ -434,8 +527,6 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
   }
 
   List<String> uniqueRecognizedFaceNames = [];
-
-  // Existing code...
 
   String _recognizeFace(imglib.Image img) {
     List input = ScannerUtils.imageToByteListFloat32(img, 112, 128, 128);
@@ -449,11 +540,15 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
     String recognizedFaceName =
         _compareExistSavedFaces(_predictedData).toUpperCase();
 
-    if (!uniqueRecognizedFaceNames.contains(recognizedFaceName)) {
-      uniqueRecognizedFaceNames.add(recognizedFaceName);
-      _addRecognizedFaceName(recognizedFaceName);
+    // Check if the recognized face name is "NOT RECOGNIZED", then dont save it,
+    //check if recognizedFaceName is unique, so we do not save the same student twice.
+    if (recognizedFaceName != "NOT RECOGNIZED") {
+      if (!uniqueRecognizedFaceNames.contains(recognizedFaceName)) {
+        uniqueRecognizedFaceNames.add(recognizedFaceName);
+        _addRecognizedFaceName(recognizedFaceName);
+      }
     }
-
+    print(uniqueRecognizedFaceNames);
     return recognizedFaceName;
   }
 
