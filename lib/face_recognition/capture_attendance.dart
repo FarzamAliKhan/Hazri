@@ -50,7 +50,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
   CameraController _camera;
   Detector _currentDetector = Detector.face;
   bool _isDetecting = false;
-  final CameraLensDirection _direction = CameraLensDirection.front;
+  final CameraLensDirection _direction = CameraLensDirection.back;
   bool _faceFound = false;
   bool _camPos = false; //FALSE means Front Camera and TRUE means Back Camera
   String _displayBase64FaceImage = "";
@@ -281,7 +281,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
               child: Text(
                 'Initializing Camera...',
                 style: GoogleFonts.ubuntu(
-                    color: const Color(0xff9DD1F1), fontWeight: FontWeight.bold, fontSize: 30),
+                    color: const Color(0xff508AA8), fontWeight: FontWeight.bold, fontSize: 30),
               ),
             )
           : Stack(
@@ -339,7 +339,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
             style: GoogleFonts.ubuntu(
                 color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          backgroundColor: const Color(0xff9DD1F1),
+          backgroundColor: const Color(0xff508AA8),
           centerTitle: true,
           shadowColor: Colors.blueGrey,
           leading: IconButton(
@@ -356,7 +356,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
             Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           FloatingActionButton(
             shape: const CircleBorder(),
-            backgroundColor: (_faceFound) ? const Color(0xff9DD1F1) : Colors.blueGrey[300],
+            backgroundColor: (_faceFound) ? const Color(0xff508AA8) : Colors.blueGrey[300],
             child: const Icon(Icons.camera_sharp, color: Colors.white,),
             onPressed: () {
               if (_faceFound) {
@@ -368,7 +368,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      backgroundColor: const Color(0xff9DD1F1),
+                      backgroundColor: const Color(0xff508AA8),
                       title: Text(
                         'Mark Attendance',
                         style: GoogleFonts.ubuntu(

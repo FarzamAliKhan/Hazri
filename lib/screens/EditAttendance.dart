@@ -31,19 +31,25 @@ class RowEntity {
   }
 }
 
-class AttendanceScreen extends StatefulWidget {
+class EditAttendance extends StatefulWidget {
   final String courseCode;
   final String sessionDocumentId;
+  final String selectedDate;
+  final String RoleType;
 
-  const AttendanceScreen(
-      {Key key, @required this.courseCode, @required this.sessionDocumentId});
+  const EditAttendance(
+      {Key key,
+      @required this.courseCode,
+      @required this.sessionDocumentId,
+      @required this.selectedDate,
+      @required this.RoleType});
 
   @override
-  AttendanceScreenState createState() => AttendanceScreenState();
+  EditAttendanceState createState() => EditAttendanceState();
 }
 
-class AttendanceScreenState extends State<AttendanceScreen> {
-   Future<DocumentSnapshot<Map<String, dynamic>>> attendanceData;
+class EditAttendanceState extends State<EditAttendance> {
+  Future<DocumentSnapshot<Map<String, dynamic>>> attendanceData;
 
   final _editableTableKey = GlobalKey<EditableTableState>();
 
@@ -56,12 +62,24 @@ class AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getAttendanceData() async {
+    // Convert the selectedDate to a string or a format compatible with your data
+    // String selectedDateString =
+    //     DateFormat('yyyy-MM-dd').format(widget.selectedDate);
+
     return FirebaseFirestore.instance
         .collection('attendance')
         .doc(widget.courseCode)
         .collection('session')
-        .doc(widget.sessionDocumentId)
-        .get();
+        .where('date', isEqualTo: widget.selectedDate)
+        .get()
+        .then((QuerySnapshot<Map<String, dynamic>> snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs.first;
+      } else {
+        // Handle the case where no data is found for the selected date
+        throw Exception("No data found for the selected date");
+      }
+    });
   }
 
   // Function to map Firebase data to table rows
@@ -264,7 +282,7 @@ class AttendanceScreenState extends State<AttendanceScreen> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-            "Edit Attendance",
+            "${widget.RoleType}",
             style: GoogleFonts.ubuntu(
                 color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -272,89 +290,69 @@ class AttendanceScreenState extends State<AttendanceScreen> {
           backgroundColor: AppColors.secondaryColor,
           centerTitle: true,
           shadowColor: Colors.blueGrey,
-          leading: const Icon(
-            Icons.person,
-            color: Colors.white,
-          ),
-          actions: [
-            /* GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-              _editableTableKey.currentState?.addRow();
-            },
-            child: const Icon(Icons.add),
-          ),*/
-            const SizedBox(width: 8.0),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () async {
-                WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-                _editableTableKey.currentState?.readOnly = editing;
-                setState(() {
-                  editing = !editing;
-                });
-                if (!editing) {
-                  print(
-                      'table filling status: ${_editableTableKey.currentState?.currentData.isFilled}');
-                  final currentData =
-                      _editableTableKey.currentState?.currentData;
-                  // Check if currentData is not null
-                  if (currentData != null) {
-                    // Get the previous rows
-                    List<Object> currentRows = currentData.rows ?? [];
-                    print('currentRows: $currentRows');
-
-                    DocumentSnapshot<Map<String, dynamic>> snapshot =
-                        await attendanceData;
-                    var firebaseDocument = snapshot.data();
-
-                    List<Map<String, dynamic>> previousRows =
-                        mapFirebaseDataToTableRows(firebaseDocument);
-                    print('previousRows: $previousRows');
-
-                    int currentLength = currentRows.length;
-                    int previousLength = previousRows.length;
-                    int diff = currentLength - previousLength;
-
-                    print(currentRows[currentLength + diff].toString());
-
-                    // Print the runtime type of each item in currentRows
-                    currentRows.forEach((item) {
-                      print('Item type: ${item.runtimeType}');
-                      String stringItem = item.toString();
-                      var s = stringItem;
-                      print(s);
-                      var x = json.decode(stringItem);
-                      print(x);
-                    });
-
-                    /*// Check if there is at least one added row
-                    if (addedRows.isNotEmpty) {
-                      // Extract relevant data from the added row (assuming 'name' is the key)
-                      String studentName = addedRows.first['name'];
-
-                      // Update the Firebase data with the new row
-                      await updateFirebaseData(studentName);
-
-                      // Print information for debugging
-                      print('Row added: $studentName');
-                      print('Updated Firebase data: ${await getAttendanceData()}');
-                    } else {
-                      print('No added row found');
-                    }*/
-                  } else {
-                    print('No current data found');
-                  }
-                }
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
               },
-              child: Icon(
-                !editing ? Icons.edit : Icons.check,
-                color: Colors.white,
-              ),
-            ),
-            
-          ]),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,)),
+          actions: widget.RoleType == 'Edit Attendance'
+              ? [
+                  const SizedBox(width: 8.0),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () async {
+                      WidgetsBinding.instance.focusManager.primaryFocus
+                          ?.unfocus();
+                      _editableTableKey.currentState?.readOnly = editing;
+                      setState(() {
+                        editing = !editing;
+                      });
+                      if (!editing) {
+                        print(
+                            'table filling status: ${_editableTableKey.currentState?.currentData.isFilled}');
+                        final currentData =
+                            _editableTableKey.currentState?.currentData;
+                        // Check if currentData is not null
+                        if (currentData != null) {
+                          // Get the previous rows
+                          List<Object> currentRows = currentData.rows ?? [];
+                          print('currentRows: $currentRows');
+
+                          DocumentSnapshot<Map<String, dynamic>> snapshot =
+                              await attendanceData;
+                          var firebaseDocument = snapshot.data();
+
+                          List<Map<String, dynamic>> previousRows =
+                              mapFirebaseDataToTableRows(firebaseDocument);
+                          print('previousRows: $previousRows');
+
+                          int currentLength = currentRows.length;
+                          int previousLength = previousRows.length;
+                          int diff = currentLength - previousLength;
+
+                          print(currentRows[currentLength + diff].toString());
+
+                          // Print the runtime type of each item in currentRows
+                          currentRows.forEach((item) {
+                            print('Item type: ${item.runtimeType}');
+                            String stringItem = item.toString();
+                            var s = stringItem;
+                            print(s);
+                            var x = json.decode(stringItem);
+                            print(x);
+                          });
+                        } else {
+                          print('No current data found');
+                        }
+                      }
+                    },
+                    child: Icon(
+                      !editing ? Icons.edit : Icons.check,
+                      color: Colors.white,
+                    ),
+                  ),
+                ]
+              : []),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.secondaryColor,
         tooltip: 'Print Document',
@@ -423,14 +421,13 @@ class AttendanceScreenState extends State<AttendanceScreen> {
           // Rows formatted to pass to EditableTable()
           final rows = tableRows;
           String section = attendanceDataMap['section'] ?? '';
-          DateTime date = attendanceDataMap['date'].toDate();
-          String formattedDate =
-              DateFormat('dd-MMMM-yyyy HH:mm:ss').format(date);
+          String date = attendanceDataMap['date'];
+          // String formattedDate =
+          //     DateFormat('dd-MMMM-yyyy HH:mm:ss');
           final courseCode = widget.courseCode;
           //print(formattedDate);
 
-          final data =
-              constructTableData(rows, section, formattedDate, courseCode);
+          final data = constructTableData(rows, section, date, courseCode);
           return SingleChildScrollView(
             padding: EdgeInsets.all(12.0),
             child: Center(

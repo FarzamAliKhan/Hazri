@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/face_recognition/camera_detector.dart';
 import 'package:hazri2/global/DashButton.dart';
+import 'package:hazri2/screens/DateListScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 
 import '../face_recognition/capture_attendance.dart';
@@ -32,15 +33,12 @@ class _TeacherState extends State<Teacher> {
     return FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
   }
 
-Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
-        .instance
-        .collection('courses')
-        .get();
+  Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance.collection('courses').get();
 
     return querySnapshot;
   }
-    
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +51,7 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                   color: Colors.white, fontWeight: FontWeight.bold),
             ),
             automaticallyImplyLeading: false,
-            backgroundColor: const Color(0xff9DD1F1),
+            backgroundColor:  const Color(0xff508AA8),
             centerTitle: true,
             shadowColor: Colors.blueGrey,
             leading: const Icon(
@@ -62,7 +60,10 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
             ),
             actions: [
               IconButton(
-                icon: const FaIcon(FontAwesomeIcons.rightFromBracket, color: Colors.white,),
+                icon: const FaIcon(
+                  FontAwesomeIcons.rightFromBracket,
+                  color: Colors.white,
+                ),
                 onPressed: () {
                   FirebaseAuth.instance.signOut().then((value) {
                     Navigator.push(
@@ -90,7 +91,7 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                     children: [
                       DashWelcome(
                         name: '$userName!',
-                        color: const Color(0xff9DD1F1),
+                        color:  const Color(0xff508AA8),
                       ),
                       const SizedBox(
                         height: 10,
@@ -107,7 +108,7 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) =>
-                                           const CaptureAttendance())));
+                                            const CaptureAttendance())));
                               },
                               child: const DashComp(
                                 name: "Capture Attendance",
@@ -116,11 +117,17 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                                   color: Colors.white,
                                   size: 60,
                                 ),
-                                color: Color(0xff9DD1F1),
+                                color:   Color(0xff508AA8),
                               ),
                             ),
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const DateListScreen(
+                                            RoleType: "Edit Attendance")));
+                              },
                               child: const DashComp(
                                 name: "Manual Attendance",
                                 icon: Icon(
@@ -128,7 +135,7 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                                   color: Colors.white,
                                   size: 60,
                                 ),
-                                color: Color(0xff9DD1F1),
+                                color:   Color(0xff508AA8),
                               ),
                             )
                           ],
@@ -143,27 +150,15 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
-                              onTap: () async {
-                                // Fetch courseData inside the onTap callback
-                                QuerySnapshot<Map<String, dynamic>>
-                                    courseDataSnapshot = await getCourseData();
-
-                                // Extract the courseCode from the first document in the query result
-                                String courseCode =
-                                    courseDataSnapshot.docs.isNotEmpty
-                                        ? courseDataSnapshot.docs[0]
-                                            .data()['courseCode']
-                                        : '';
-
+                              onTap: () {
                                 Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AttendanceScreen(
-                                          courseCode: courseCode,
-                                          sessionDocumentId:
-                                              "1fb7ph6V9VnA7jMBVzyH")),
-                                );
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DateListScreen(
+                                                RoleType: "View Attendance")));
                               },
+                              
                               child: const DashComp(
                                 name: "View Attendance",
                                 icon: Icon(
@@ -171,7 +166,7 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                                   color: Colors.white,
                                   size: 60,
                                 ),
-                                color: Color(0xff9DD1F1),
+                                color: Color(0xff508AA8),
                               ),
                             ),
                             InkWell(
@@ -183,7 +178,7 @@ Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
                                   color: Colors.white,
                                   size: 60,
                                 ),
-                                color: Color(0xff9DD1F1),
+                                color: Color(0xff508AA8),
                               ),
                             )
                           ],

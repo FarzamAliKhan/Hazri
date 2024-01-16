@@ -6,10 +6,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/face_recognition/view_label.dart';
 import 'package:hazri2/global/DashButton.dart';
+import 'package:hazri2/screens/AttendanceScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 
 import '../face_recognition/capture_attendance.dart';
 import 'package:hazri2/face_recognition/add_user.dart';
+
+import 'DateListScreen.dart';
+
 
 class Admin extends StatefulWidget {
   final String uid;
@@ -31,6 +35,14 @@ class _AdminState extends State<Admin> {
   Future<DocumentSnapshot<Map<String, dynamic>>> getUserData() async {
     return FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
   }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance.collection('courses').get();
+
+    return querySnapshot;
+  }
+    
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +149,14 @@ class _AdminState extends State<Admin> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               InkWell(
-                                onTap: () {},
+                              
+                                 onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              const DateListScreen(RoleType: "Edit Attendance",))));
+                                },
                                 child: const DashComp(
                                   name: "Edit Attendance",
                                   icon: Icon(
@@ -149,7 +168,32 @@ class _AdminState extends State<Admin> {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {},
+                                // onTap: () async {
+                                //   // Fetch courseData inside the onTap callback
+                                //   QuerySnapshot<Map<String, dynamic>>
+                                //       courseDataSnapshot =
+                                //       await getCourseData();
+
+                                //   // Extract the courseCode from the first document in the query result
+                                //   String courseCode =
+                                //       courseDataSnapshot.docs.isNotEmpty
+                                //           ? courseDataSnapshot.docs[0]
+                                //               .data()['courseCode']
+                                //           : '';
+
+                                //   // ignore: use_build_context_synchronously
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ViewAttendance(
+                                //             courseCode: courseCode,
+                                //             sessionDocumentId:
+                                //                 "1fb7ph6V9VnA7jMBVzyH")),
+                                //   );
+                                // },
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: ((context) => DateListScreen(RoleType: "View Attendance",))));
+                                },
                                 child: const DashComp(
                                   name: "View Attendance",
                                   icon: Icon(

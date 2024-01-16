@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -19,7 +17,7 @@ class PDFDownloaderHelper {
         final path = '${directory.path}/$fileName';
         final File file = File(path);
         await file.writeAsBytes(pdfBytes);
-        showNotification(path);
+        // showNotification(path);
         print('PDF saved at: $path');
 
       } else {
@@ -36,12 +34,12 @@ class PDFDownloaderHelper {
         await file.writeAsBytes(pdfBytes);
 
         // Show a notification
-        showNotification(path);
+        // showNotification(path);
 
         print('PDF saved at: $path');
 
         final res = await Share.shareXFiles([XFile(path, bytes: pdfBytes)]);
-        showNotification(path);
+        // showNotification(path);
         print('PDF saved at: $path');
 
       }
@@ -52,22 +50,22 @@ class PDFDownloaderHelper {
 }
 
 
-  Future<void> showNotification(String pdfPath) async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 0,
-        channelKey: 'basic_channel',
-        title: 'PDF Generated',
-        body: 'Tap to Open!',
-        actionType: ActionType.Default,
-        notificationLayout: NotificationLayout.BigText,
-        payload: {'pdfPath': pdfPath},
-      ),
-      actionButtons: [
-        NotificationActionButton(
-          key: 'openPdfAction',
-          label: 'Open PDF',
-        ),
-      ],
-    );
-  }
+  // Future<void> showNotification(String pdfPath) async {
+  //   await AwesomeNotifications().createNotification(
+  //     content: NotificationContent(
+  //       id: 0,
+  //       channelKey: 'basic_channel',
+  //       title: 'PDF Generated',
+  //       body: 'Tap to Open!',
+  //       actionType: ActionType.Default,
+  //       notificationLayout: NotificationLayout.BigText,
+  //       payload: {'pdfPath': pdfPath},
+  //     ),
+  //     actionButtons: [
+  //       NotificationActionButton(
+  //         key: 'openPdfAction',
+  //         label: 'Open PDF',
+  //       ),
+  //     ],
+  //   );
+  // }
