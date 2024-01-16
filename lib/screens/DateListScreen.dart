@@ -20,7 +20,6 @@ class DateListScreen extends StatefulWidget {
 class _DateListScreenState extends State<DateListScreen> {
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         title: 

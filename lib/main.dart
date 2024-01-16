@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hazri2/firebase_options.dart';
 import 'package:hazri2/screens/LoginPage.dart';
+import 'package:hazri2/screens/splashScreen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +28,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
-      // theme: Provider.of<ThemeProvider>(context).themeData
+      home: const SplashScreen(),
     );
   }
 }
