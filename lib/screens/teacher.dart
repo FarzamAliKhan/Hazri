@@ -9,6 +9,7 @@ import 'package:hazri2/global/DashButton.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 
 import '../face_recognition/capture_attendance.dart';
+import 'AttendanceScreen.dart';
 
 class Teacher extends StatefulWidget {
   final String uid;
@@ -30,6 +31,16 @@ class _TeacherState extends State<Teacher> {
   Future<DocumentSnapshot<Map<String, dynamic>>> getUserData() async {
     return FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
   }
+
+Future<QuerySnapshot<Map<String, dynamic>>> getCourseData() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('courses')
+        .get();
+
+    return querySnapshot;
+  }
+    
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +143,27 @@ class _TeacherState extends State<Teacher> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
-                              onTap: () {},
+                              onTap: () async {
+                                // Fetch courseData inside the onTap callback
+                                QuerySnapshot<Map<String, dynamic>>
+                                    courseDataSnapshot = await getCourseData();
+
+                                // Extract the courseCode from the first document in the query result
+                                String courseCode =
+                                    courseDataSnapshot.docs.isNotEmpty
+                                        ? courseDataSnapshot.docs[0]
+                                            .data()['courseCode']
+                                        : '';
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AttendanceScreen(
+                                          courseCode: courseCode,
+                                          sessionDocumentId:
+                                              "1fb7ph6V9VnA7jMBVzyH")),
+                                );
+                              },
                               child: const DashComp(
                                 name: "View Attendance",
                                 icon: Icon(
