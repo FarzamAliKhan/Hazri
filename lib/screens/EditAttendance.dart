@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,20 +15,6 @@ import 'package:flutter_editable_table/constants.dart';
 import 'package:flutter_editable_table/flutter_editable_table.dart';
 import 'package:intl/intl.dart';
 
-class RowEntity {
-  String name;
-  String status;
-
-  RowEntity(this.name, this.status);
-
-  // Method to convert RowEntity to a Map
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'status': status,
-    };
-  }
-}
 
 class EditAttendance extends StatefulWidget {
   final String courseCode;
@@ -89,7 +74,7 @@ class EditAttendanceState extends State<EditAttendance> {
 
     // Extract the required fields from the attendanceData
     List<String> presentStudents =
-        List<String>.from(attendanceData['presentStudents'] ?? []);
+    List<String>.from(attendanceData['presentStudents'] ?? []);
 
     // Map present Students data to table rows
     for (String student in presentStudents) {
@@ -109,14 +94,15 @@ class EditAttendanceState extends State<EditAttendance> {
 
     // Extract the attendanceList from the attendanceData
     Map<String, dynamic> attendanceList =
-        Map<String, dynamic>.from(attendanceData['attendanceList'] ?? {});
+    Map<String, dynamic>.from(attendanceData['attendanceList'] ?? {});
 
     // Map attendanceList data to table rows
     attendanceList.forEach((String student, dynamic attendanceStatus) {
       rows.add({
         "name": student,
         "status":
-            attendanceStatus, // Assuming "status" is the key in your table data for attendance status
+        attendanceStatus,
+        // Assuming "status" is the key in your table data for attendance status
         // Add other relevant fields here
       });
     });
@@ -294,64 +280,66 @@ class EditAttendanceState extends State<EditAttendance> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,)),
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded, color: Colors.white,)),
           actions: widget.RoleType == 'Edit Attendance'
               ? [
-                  const SizedBox(width: 8.0),
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () async {
-                      WidgetsBinding.instance.focusManager.primaryFocus
-                          ?.unfocus();
-                      _editableTableKey.currentState?.readOnly = editing;
-                      setState(() {
-                        editing = !editing;
-                      });
-                      if (!editing) {
-                        print(
-                            'table filling status: ${_editableTableKey.currentState?.currentData.isFilled}');
-                        final currentData =
-                            _editableTableKey.currentState?.currentData;
-                        // Check if currentData is not null
-                        if (currentData != null) {
-                          // Get the previous rows
-                          List<Object> currentRows = currentData.rows ?? [];
-                          print('currentRows: $currentRows');
+            const SizedBox(width: 8.0),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                WidgetsBinding.instance.focusManager.primaryFocus
+                    ?.unfocus();
+                _editableTableKey.currentState?.readOnly = editing;
+                setState(() {
+                  editing = !editing;
+                });
+                if (!editing) {
+                  print(
+                      'table filling status: ${_editableTableKey.currentState
+                          ?.currentData.isFilled}');
+                  final currentData =
+                      _editableTableKey.currentState?.currentData;
+                  // Check if currentData is not null
+                  if (currentData != null) {
+                    // Get the previous rows
+                    List<Object> currentRows = currentData.rows ?? [];
+                    print('currentRows: $currentRows');
 
-                          DocumentSnapshot<Map<String, dynamic>> snapshot =
-                              await attendanceData;
-                          var firebaseDocument = snapshot.data();
+                    DocumentSnapshot<Map<String, dynamic>> snapshot =
+                    await attendanceData;
+                    var firebaseDocument = snapshot.data();
 
-                          List<Map<String, dynamic>> previousRows =
-                              mapFirebaseDataToTableRows(firebaseDocument);
-                          print('previousRows: $previousRows');
+                    List<Map<String, dynamic>> previousRows =
+                    mapFirebaseDataToTableRows(firebaseDocument);
+                    print('previousRows: $previousRows');
 
-                          int currentLength = currentRows.length;
-                          int previousLength = previousRows.length;
-                          int diff = currentLength - previousLength;
+                    int currentLength = currentRows.length;
+                    int previousLength = previousRows.length;
+                    int diff = currentLength - previousLength;
 
-                          print(currentRows[currentLength + diff].toString());
+                    print(currentRows[currentLength + diff].toString());
 
-                          // Print the runtime type of each item in currentRows
-                          currentRows.forEach((item) {
-                            print('Item type: ${item.runtimeType}');
-                            String stringItem = item.toString();
-                            var s = stringItem;
-                            print(s);
-                            var x = json.decode(stringItem);
-                            print(x);
-                          });
-                        } else {
-                          print('No current data found');
-                        }
-                      }
-                    },
-                    child: Icon(
-                      !editing ? Icons.edit : Icons.check,
-                      color: Colors.white,
-                    ),
-                  ),
-                ]
+                    // Print the runtime type of each item in currentRows
+                    currentRows.forEach((item) {
+                      print('Item type: ${item.runtimeType}');
+                      String stringItem = item.toString();
+                      var s = stringItem;
+                      print(s);
+                      var x = json.decode(stringItem);
+                      print(x);
+                    });
+                  } else {
+                    print('No current data found');
+                  }
+                }
+              },
+              child: Icon(
+                !editing ? Icons.edit : Icons.check,
+                color: Colors.white,
+              ),
+            ),
+          ]
               : []),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.secondaryColor,
@@ -359,7 +347,7 @@ class EditAttendanceState extends State<EditAttendance> {
         onPressed: () async {
           // Wait for the attendanceData Future to complete
           DocumentSnapshot<Map<String, dynamic>> snapshot =
-              await attendanceData;
+          await attendanceData;
           print(snapshot);
           print('attendance: $attendanceData.size');
           final courseCode = widget.courseCode;
@@ -382,7 +370,7 @@ class EditAttendanceState extends State<EditAttendance> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
                 child:
-                    CircularProgressIndicator()); // Loading indicator while data is being fetched
+                CircularProgressIndicator()); // Loading indicator while data is being fetched
           }
           if (!snapshot.hasData || !snapshot.data.exists) {
             return const Text(
@@ -413,7 +401,7 @@ class EditAttendanceState extends State<EditAttendance> {
 
           // Map Firebase data to table rows
           List<Map<String, dynamic>> tableRows =
-              mapAttendanceListToTableRows(attendanceDataMap);
+          mapAttendanceListToTableRows(attendanceDataMap);
           print('tableRows: $tableRows');
           /*var lmao = tableRows[0];
         print(lmao);*/
@@ -463,7 +451,8 @@ class EditAttendanceState extends State<EditAttendance> {
                   onRowAdded: () async {},
                   onFilling: (FillingArea area, dynamic value) {
                     print(
-                        'filling: ${area.toString()}, value: ${value.toString()}');
+                        'filling: ${area.toString()}, value: ${value
+                            .toString()}');
                   },
                   onSubmitted: (FillingArea area, dynamic value) async {
                     print('lmao');
@@ -481,7 +470,7 @@ class EditAttendanceState extends State<EditAttendance> {
                     // Check if currentData is not null
                     if (currentData != null) {
                       // Update the Firebase data with the new row
-                      await updateStudentStatus("Faiq - 95", status);
+                      await updateStudentStatus("FAIQ - 95", status);
 
                       // Print information for debugging
                       print('Row added: $status');
@@ -547,12 +536,12 @@ class EditAttendanceState extends State<EditAttendance> {
     try {
       // Get the current attendance data from Firebase
       DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await getAttendanceData();
+      await getAttendanceData();
       Map<String, dynamic> attendanceData = snapshot.data() ?? {};
 
       // Update the relevant fields in attendanceData
       Map<String, dynamic> attendanceList =
-          Map<String, dynamic>.from(attendanceData['attendanceList'] ?? {});
+      Map<String, dynamic>.from(attendanceData['attendanceList'] ?? {});
 
       // Update the status for the specific student
       attendanceList[studentName] = status;
@@ -580,8 +569,9 @@ class EditAttendanceState extends State<EditAttendance> {
     final pw.Document doc = pw.Document();
 
     // Load the image from assets
-    final Uint8List imageList =
-        (await rootBundle.load('assets/ned_logo.png')).buffer.asUint8List();
+    final Uint8List imageList = (await rootBundle.load('assets/ned_logo.png'))
+        .buffer.asUint8List();
+
     // Add one page with centered text "Hello World"
     doc.addPage(
       pw.Page(
@@ -594,9 +584,8 @@ class EditAttendanceState extends State<EditAttendance> {
                 children: [
                   pw.Image(pw.MemoryImage(imageList), width: 100, height: 100),
                   pw.SizedBox(width: 20),
-                  pw.Text('Attendance Report',
-                      style: pw.TextStyle(
-                          fontSize: 20, fontWeight: pw.FontWeight.bold)),
+                  pw.Text('Attendance Report', style: pw.TextStyle(
+                      fontSize: 20, fontWeight: pw.FontWeight.bold)),
                 ],
               ),
               pw.SizedBox(height: 20),
@@ -606,8 +595,7 @@ class EditAttendanceState extends State<EditAttendance> {
                   style: const pw.TextStyle(fontSize: 16)),
               pw.Text('Section: ${attendanceData['section']}',
                   style: const pw.TextStyle(fontSize: 16)),
-              pw.Text(
-                  'Session Date: ${attendanceData['date'].toDate().toLocal()}',
+              pw.Text('Session Date: ${attendanceData['date']}',
                   style: const pw.TextStyle(fontSize: 16)),
 
               pw.SizedBox(height: 20),
@@ -621,28 +609,32 @@ class EditAttendanceState extends State<EditAttendance> {
                 },
                 children: [
                   pw.TableRow(children: [
-                    pw.Text('Absent Students',
-                        style: pw.TextStyle(
-                            fontSize: 16, fontWeight: pw.FontWeight.bold)),
-                    pw.Text('Present Students',
-                        style: pw.TextStyle(
-                            fontSize: 16, fontWeight: pw.FontWeight.bold)),
+                    pw.Text('Absent Students', style: pw.TextStyle(
+                        fontSize: 16, fontWeight: pw.FontWeight.bold)),
+                    pw.Text('Present Students', style: pw.TextStyle(
+                        fontSize: 16, fontWeight: pw.FontWeight.bold)),
                   ]),
                   pw.TableRow(children: [
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children:
-                          (attendanceData['absentStudents'] as List<dynamic>)
-                              .map((dynamic student) {
-                        return pw.Text(student.toString());
+                      children: (attendanceData['attendanceList'] as Map<
+                          dynamic,
+                          dynamic>)
+                          .entries
+                          .where((entry) => entry.value == 'Absent')
+                          .map((entry) {
+                        return pw.Text(entry.key.toString());
                       }).toList(),
                     ),
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children:
-                          (attendanceData['presentStudents'] as List<dynamic>)
-                              .map((dynamic student) {
-                        return pw.Text(student.toString());
+                      children: (attendanceData['attendanceList'] as Map<
+                          dynamic,
+                          dynamic>)
+                          .entries
+                          .where((entry) => entry.value == 'Present')
+                          .map((entry) {
+                        return pw.Text(entry.key.toString());
                       }).toList(),
                     ),
                   ]),
@@ -663,35 +655,38 @@ class EditAttendanceState extends State<EditAttendance> {
     final granted = await PermissionHelper.requestStoragePermissions();
     if (!granted) {
       // Get the list of external storage directories
-      Directory directories = await getApplicationDocumentsDirectory();
+      Directory directories = await getExternalStorageDirectory();
       Directory generalDownloadDir = Directory(
           '/storage/emulated/0/Download'); // THIS WORKS for android only !!!!!!
 
+      print('director: $directories');
       // Check if there's a valid directory in the list
-      // if (directories != null && directories.isNotEmpty) {
-      // Use the first directory in the list
-      // final Directory directory = directories[0];
-      final String path = '${generalDownloadDir.path}/attendance_report.pdf';
+      //if (directories != null && directories.isNotEmpty) {
+        // Use the first directory in the list
+        //final Directory directory = directories[0];
+        final String path = '${generalDownloadDir.path}/attendance_report.pdf';
 
-      // Save the Pdf file
-      final File file = File(path);
-      await file.writeAsBytes(pdfBytes);
+        // Save the Pdf file
+        final File file = File(path);
+        await file.writeAsBytes(pdfBytes);
+        print('path: $path');
 
-      // Show a notification
-      // showNotification(path);
+        // Show a notification
+        // showNotification(path);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('PDF saved at: $path'),
-        duration: Duration(seconds: 5),
-      ));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Writing Permission Denied, Allow from Settings'),
-        duration: Duration(seconds: 5),
-      ));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('PDF saved at: $path'),
+          duration: Duration(seconds: 5),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Writing Permission Denied, Allow from Settings'),
+          duration: Duration(seconds: 5),
+        ));
+      }
     }
   }
-}
+
 
 // Future<void> showNotification(String pdfPath) async {
 //   await AwesomeNotifications().createNotification(

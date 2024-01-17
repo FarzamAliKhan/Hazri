@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/dashButton.dart';
 import 'package:hazri2/screens/LoginPage.dart';
+import 'package:hazri2/screens/studentAttendance.dart';
 
 class Student extends StatefulWidget {
   final String uid;
@@ -82,7 +83,13 @@ class _StudentState extends State<Student> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
-                              onTap: (){},
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            StudentAttendance(studentName: userName,)));
+                              },
                               child: const DashComp(
                                 name: "View Attendance",
                                 icon: Icon(Icons.remove_red_eye, color: Colors.white,size: 60,),
