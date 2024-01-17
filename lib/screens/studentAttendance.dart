@@ -555,7 +555,6 @@ Future<Uint8List> buildStudentPdf(List<Map<String, dynamic>> overallAttendanceLi
   // save the pdf using provider in system path
   Future<void> savePdf(Uint8List pdfBytes) async {
     final granted = await PermissionHelper.requestStoragePermissions();
-    if (!granted) {
       // Get the list of external storage directories
       Directory directories = await getExternalStorageDirectory();
       Directory generalDownloadDir = Directory(
@@ -566,7 +565,7 @@ Future<Uint8List> buildStudentPdf(List<Map<String, dynamic>> overallAttendanceLi
       //if (directories != null && directories.isNotEmpty) {
         // Use the first directory in the list
         //final Directory directory = directories[0];
-        final String path = '${directories.path}/attendance_report.pdf';
+        final String path = '${generalDownloadDir.path}/attendance_report.pdf';
 
         // Save the Pdf file
         final File file = File(path);
@@ -580,12 +579,7 @@ Future<Uint8List> buildStudentPdf(List<Map<String, dynamic>> overallAttendanceLi
           content: Text('PDF saved at: $path'),
           duration: Duration(seconds: 5),
         ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Writing Permission Denied, Allow from Settings'),
-          duration: Duration(seconds: 5),
-        ));
+
       }
     }
-  }
 

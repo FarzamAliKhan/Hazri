@@ -624,7 +624,8 @@ Future<void> updateStudentStatus(String studentName, String status) async {
   // save the pdf using provider in system path
   Future<void> savePdf(Uint8List pdfBytes) async {
     final granted = await PermissionHelper.requestStoragePermissions();
-    if (!granted) {
+    print(granted);
+
       // Get the list of external storage directories
       Directory directories = await getExternalStorageDirectory();
       Directory generalDownloadDir = Directory(
@@ -647,12 +648,12 @@ Future<void> updateStudentStatus(String studentName, String status) async {
           content: Text('PDF saved at: $path'),
           duration: Duration(seconds: 5),
         ));
-      } else {
+       /*else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Writing Permission Denied, Allow from Settings'),
           duration: Duration(seconds: 5),
         ));
-      }
+      }*/
     }
   }
 

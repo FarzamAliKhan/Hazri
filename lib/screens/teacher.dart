@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hazri2/face_recognition/camera_detector.dart';
 import 'package:hazri2/global/DashButton.dart';
 import 'package:hazri2/screens/DateListScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
@@ -108,7 +107,7 @@ class _TeacherState extends State<Teacher> {
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) =>
-                                            const CaptureAttendance())));
+                                            CaptureAttendance(teacherId: widget.uid))));
                               },
                               child: const DashComp(
                                 name: "Capture Attendance",
@@ -169,6 +168,18 @@ class _TeacherState extends State<Teacher> {
                                 color: Color(0xff508AA8),
                               ),
                             ),
+                            InkWell(
+                              onTap: () {},
+                              child: const DashComp(
+                                name: "Generate Report",
+                                icon: Icon(
+                                  Icons.receipt_outlined,
+                                  color: Colors.white,
+                                  size: 60,
+                                ),
+                                color: Color(0xff508AA8),
+                              ),
+                            )
                           ],
                         ),
                       )

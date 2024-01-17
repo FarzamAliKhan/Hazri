@@ -449,6 +449,8 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
       String teacherId, String courseCode, List<String> studentPresent) async {
     try {
       // Check if the provided teacherId matches the teacher field in the course document
+      print('teacherid: $teacherId');
+      print('courseCode: $courseCode');
       DocumentSnapshot<Map<String, dynamic>> courseDoc = await FirebaseFirestore
           .instance
           .collection('attendance')
