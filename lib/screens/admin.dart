@@ -149,7 +149,6 @@ class _AdminState extends State<Admin> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               InkWell(
-                              
                                  onTap: () {
                                   Navigator.push(
                                       context,

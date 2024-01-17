@@ -4,8 +4,6 @@
 
 // @dart=2.9
 
-import 'dart:ui' as ui;
-import 'dart:math';
 import 'dart:io';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:flutter/material.dart';
@@ -14,192 +12,6 @@ enum Detector {
   face,
 }
 
-const List<Point<int>> faceMaskConnections = [
-  Point(0, 4),
-  Point(0, 55),
-  Point(4, 7),
-  Point(4, 55),
-  Point(4, 51),
-  Point(7, 11),
-  Point(7, 51),
-  Point(7, 130),
-  Point(51, 55),
-  Point(51, 80),
-  Point(55, 72),
-  Point(72, 76),
-  Point(76, 80),
-  Point(80, 84),
-  Point(84, 72),
-  Point(72, 127),
-  Point(72, 130),
-  Point(130, 127),
-  Point(117, 130),
-  Point(11, 117),
-  Point(11, 15),
-  Point(15, 18),
-  Point(18, 21),
-  Point(21, 121),
-  Point(15, 121),
-  Point(21, 25),
-  Point(25, 125),
-  Point(125, 128),
-  Point(128, 127),
-  Point(128, 29),
-  Point(25, 29),
-  Point(29, 32),
-  Point(32, 0),
-  Point(0, 45),
-  Point(32, 41),
-  Point(41, 29),
-  Point(41, 45),
-  Point(45, 64),
-  Point(45, 32),
-  Point(64, 68),
-  Point(68, 56),
-  Point(56, 60),
-  Point(60, 64),
-  Point(56, 41),
-  Point(64, 128),
-  Point(64, 127),
-  Point(125, 93),
-  Point(93, 117),
-  Point(117, 121),
-  Point(121, 125),
-];
-
-class FaceDetectorLandmarkPainter extends CustomPainter {
-  FaceDetectorLandmarkPainter(this.absoluteImageSize, this.results, this.camPos);
-
-  final Size absoluteImageSize;
-  dynamic results;
-  bool camPos;
-  Size widgetSize;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-
-    final double scaleX = size.width / absoluteImageSize.width;
-    final double scaleY = size.height / absoluteImageSize.height;
-    widgetSize = size;
-
-    final Paint paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
-      ..color = Colors.red;
-
-    final Paint linePaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
-      ..color = Colors.green;
-    for (String label in results.keys) {
-      for (final Face face in results[label]) {
-        final contour = face.getContour((FaceContourType.allPoints));
-        if (Platform.isAndroid && !camPos) {
-          canvas.drawPoints(
-              ui.PointMode.points,
-              contour.positionsList
-                  .map((offset) =>
-                  Offset(size.width - (offset.dx * scaleX), offset.dy * scaleY))
-                  .toList(),
-              paint);
-        } else if (Platform.isIOS || camPos) {
-          canvas.drawPoints(
-              ui.PointMode.points,
-              contour.positionsList
-                  .map((offset) =>
-                  Offset((offset.dx * scaleX), offset.dy * scaleY))
-                  .toList(),
-              paint);
-        }
-        for (final connection in faceMaskConnections) {
-          if (Platform.isAndroid && !camPos) {
-            if(contour.positionsList != null && contour.positionsList.length != 0) {
-              double tmpDxConnectionX = size.width -
-                  contour.positionsList[connection.x]
-                      .scale(scaleX, scaleY)
-                      .dx;
-              double tmpDyConnectionX = contour.positionsList[connection.x]
-                  .scale(scaleX, scaleY)
-                  .dy;
-              Offset a = Offset(tmpDxConnectionX, tmpDyConnectionX);
-              double tmpDxConnectionY = size.width -
-                  contour.positionsList[connection.y]
-                      .scale(scaleX, scaleY)
-                      .dx;
-              double tmpDyConnectionY = contour.positionsList[connection.y]
-                  .scale(scaleX, scaleY)
-                  .dy;
-              Offset b = Offset(tmpDxConnectionY, tmpDyConnectionY);
-              canvas.drawLine(a, b, paint);
-            }
-          } else if (Platform.isIOS || camPos) {
-            if(contour.positionsList != null && contour.positionsList.length != 0) {
-              canvas.drawLine(
-                  contour.positionsList[connection.x].scale(scaleX, scaleY),
-                  contour.positionsList[connection.y].scale(scaleX, scaleY),
-                  paint);
-            }
-          }
-        }
-        if (label == "NOT RECOGNIZED") {
-          linePaint.color = Colors.purple;
-        }
-        if (Platform.isAndroid && !camPos) {
-          canvas.drawRRect(
-              _scaleRect(
-                  rect: face.boundingBox,
-                  imageSize: absoluteImageSize,
-                  widgetSize: size,
-                  scaleX: scaleX,
-                  scaleY: scaleY,
-                  cameraPosition: camPos
-              ),
-              linePaint);
-        } else if (Platform.isIOS || camPos) {
-          canvas.drawRect(
-              _scaleRect(
-                  rect: face.boundingBox,
-                  imageSize: absoluteImageSize,
-                  widgetSize: size,
-                  scaleX: scaleX,
-                  scaleY: scaleY,
-                  cameraPosition: camPos
-              ),
-              linePaint);
-        }
-        TextSpan span = TextSpan(
-            style: TextStyle(color: Colors.deepOrange[600], fontSize: 20,
-                fontWeight: FontWeight.bold),
-            text: label
-        );
-        TextPainter textPainter = TextPainter(
-            text: span,
-            textAlign: TextAlign.left,
-            textDirection: TextDirection.ltr);
-        textPainter.layout();
-        if (Platform.isAndroid && !camPos) {
-          textPainter.paint(
-              canvas,
-              Offset(
-                  size.width - (face.boundingBox.left.toDouble()) * scaleX,
-                  (face.boundingBox.top.toDouble() ) * scaleY));
-        } else if (Platform.isIOS || camPos) {
-          textPainter.paint(
-              canvas,
-              Offset(
-                  (face.boundingBox.left.toDouble()) * scaleX,
-                  (face.boundingBox.top.toDouble() ) * scaleY));
-        }
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(FaceDetectorLandmarkPainter oldDelegate) {
-    return oldDelegate.absoluteImageSize != absoluteImageSize ||
-        oldDelegate.results != results;
-  }
-}
 //Draw Face rectangle with Name on it
 class FaceDetectorNormalPainter extends CustomPainter {
   FaceDetectorNormalPainter(this.imageSize, this.results, this.camPos);
@@ -279,15 +91,7 @@ class FaceDetectorNormalPainter extends CustomPainter {
   }
 }
 
-dynamic _scaleRect(
-    {@required Rect rect,
-      @required Size imageSize,
-      @required Size widgetSize,
-      double scaleX,
-      double scaleY,
-      bool cameraPosition
-    }
-      ) {
+dynamic _scaleRect({@required Rect rect, @required Size imageSize, @required Size widgetSize, double scaleX, double scaleY, bool cameraPosition}) {
   RRect _rRect;
   Rect _rect;
   dynamic result;

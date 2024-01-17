@@ -23,15 +23,6 @@ import 'detector_painters.dart';
 import 'detector_utils.dart';
 import 'package:intl/intl.dart';
 
-enum Choice {
-  view,
-  delete,
-  landmarkFace,
-  normalFace,
-}
-
-bool _landMarkFace = false;
-
 class CaptureAttendance extends StatefulWidget {
   final String teacherId;
 
@@ -267,11 +258,6 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
     );
 
     assert(_currentDetector == Detector.face);
-
-    if (_landMarkFace)
-      painter = FaceDetectorLandmarkPainter(imageSize, _scanResults, _camPos);
-    else
-      painter = FaceDetectorNormalPainter(imageSize, _scanResults, _camPos);
 
     return CustomPaint(
       painter: painter,

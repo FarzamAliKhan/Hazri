@@ -17,14 +17,6 @@ import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'detector_painters.dart';
 import 'detector_utils.dart';
 
-enum Choice {
-  view,
-  delete,
-  landmarkFace,
-  normalFace,
-}
-
-bool _landMarkFace = false;
 
 class AddUser extends StatefulWidget {
   const AddUser({Key key}) : super(key: key);
@@ -39,11 +31,10 @@ class _AddUserState extends State<AddUser> with WidgetsBindingObserver {
   double threshold = 1.0;
   Directory _savedFacesDir;
   List _predictedData;
-  String _rollNumber = "";
 
   tfl.Interpreter interpreter;
-  final TextEditingController _name = new TextEditingController();
-  final TextEditingController _roll = new TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _roll = TextEditingController();
 
   dynamic _scanResults;
   CameraController _camera;
@@ -263,13 +254,6 @@ class _AddUserState extends State<AddUser> with WidgetsBindingObserver {
     );
 
     assert(_currentDetector == Detector.face);
-
-    if (_landMarkFace) {
-      painter = FaceDetectorLandmarkPainter(imageSize, _scanResults, _camPos);
-    } else {
-      painter = FaceDetectorNormalPainter(imageSize, _scanResults, _camPos);
-    }
-
     return CustomPaint(
       painter: painter,
     );
