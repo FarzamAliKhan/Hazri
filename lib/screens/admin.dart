@@ -168,29 +168,6 @@ class _AdminState extends State<Admin> {
                                 ),
                               ),
                               InkWell(
-                                // onTap: () async {
-                                //   // Fetch courseData inside the onTap callback
-                                //   QuerySnapshot<Map<String, dynamic>>
-                                //       courseDataSnapshot =
-                                //       await getCourseData();
-
-                                //   // Extract the courseCode from the first document in the query result
-                                //   String courseCode =
-                                //       courseDataSnapshot.docs.isNotEmpty
-                                //           ? courseDataSnapshot.docs[0]
-                                //               .data()['courseCode']
-                                //           : '';
-
-                                //   // ignore: use_build_context_synchronously
-                                //   Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => ViewAttendance(
-                                //             courseCode: courseCode,
-                                //             sessionDocumentId:
-                                //                 "1fb7ph6V9VnA7jMBVzyH")),
-                                //   );
-                                // },
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: ((context) => DateListScreen(RoleType: "View Attendance",))));
                                 },
@@ -210,38 +187,6 @@ class _AdminState extends State<Admin> {
                         const SizedBox(
                           height: 15,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 30, left: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {},
-                                child: const DashComp(
-                                  name: "Notices",
-                                  icon: Icon(
-                                    Icons.notifications_active_outlined,
-                                    color: Colors.white,
-                                    size: 60,
-                                  ),
-                                  color: Color(0xff508AA8),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {},
-                                child: const DashComp(
-                                  name: "Monitor Diagnostics",
-                                  icon: Icon(
-                                    Icons.monitor_heart_outlined,
-                                    color: Colors.white,
-                                    size: 60,
-                                  ),
-                                  color: Color(0xff508AA8),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
                       ],
                     ),
                   );

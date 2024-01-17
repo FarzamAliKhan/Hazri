@@ -59,6 +59,7 @@ class EditAttendanceState extends State<EditAttendance> {
         .get()
         .then((QuerySnapshot<Map<String, dynamic>> snapshot) {
       if (snapshot.docs.isNotEmpty) {
+        print(snapshot.docs.first);
         return snapshot.docs.first;
       } else {
         // Handle the case where no data is found for the selected date
@@ -477,21 +478,6 @@ class EditAttendanceState extends State<EditAttendance> {
                       print(
                           'Updated Firebase data: ${await getAttendanceData()}');
 
-                      /*
-                    // Get the previous rows
-                    List<Object> currentRows = currentData.rows ?? [];
-                    print('currentRows: $currentRows');
-
-                    var addedRows = currentRows[0];
-                    print(addedRows);
-
-                    List<Map<String, dynamic>> tableRows = mapFirebaseDataToTableRows(attendanceData);
-                    print('previousRows: $tableRows');
-                    // Find the added row by comparing the previous and current rows
-                    List<Map<String, dynamic>> addedRows = currentRows
-                        .where((currentRow) => !previousRows.contains(currentRow))
-                        .toList();
-                    // Check if there is at least one added row*/
                     } else {
                       print('No added row found');
                     }
@@ -503,63 +489,48 @@ class EditAttendanceState extends State<EditAttendance> {
     );
   }
 
-/*
-// Function to update Firebase data with the new row
-  Future<void> updateFirebaseData(String studentName) async {
-    try {
-      // Get the current attendance data from Firebase
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await getAttendanceData();
-      Map<String, dynamic> attendanceData = snapshot.data() ?? {};
 
-      // Update the relevant fields in attendanceData
-      attendanceData['presentStudents'] = [
-        ...List<String>.from(attendanceData['presentStudents'] ?? []),
-        studentName,
-      ];
+ // Function to update Firebase data with the new status for a student
+Future<void> updateStudentStatus(String studentName, String status) async {
+  try {
+    // Get the current attendance data from Firebase
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance
+            .collection('attendance')
+            .doc(widget.courseCode)
+            .collection('session')
+            .where('date', isEqualTo: widget.selectedDate)
+            .get();
 
-      // Update the document in Firebase
-      await FirebaseFirestore.instance
-          .collection('attendance')
-          .doc(widget.courseCode)
-          .collection('session')
-          .doc(widget.sessionDocumentId)
-          .update(attendanceData);
+    // Check if any documents match the query
+    if (snapshot.docs.isNotEmpty) {
+      // Get the document reference of the first (and presumably only) document
+      DocumentReference attendanceDocRef = snapshot.docs.first.reference;
 
-    } catch (error) {
-      print('Error updating Firebase data: $error');
-    }
-  }
-*/
-
-  // Function to update Firebase data with the new status for a student
-  Future<void> updateStudentStatus(String studentName, String status) async {
-    try {
-      // Get the current attendance data from Firebase
-      DocumentSnapshot<Map<String, dynamic>> snapshot =
-      await getAttendanceData();
-      Map<String, dynamic> attendanceData = snapshot.data() ?? {};
+      // Get the existing data
+      Map<String, dynamic> attendanceData = snapshot.docs.first.data();
 
       // Update the relevant fields in attendanceData
       Map<String, dynamic> attendanceList =
-      Map<String, dynamic>.from(attendanceData['attendanceList'] ?? {});
+          Map<String, dynamic>.from(attendanceData['attendanceList'] ?? {});
 
       // Update the status for the specific student
       attendanceList[studentName] = status;
 
       // Update the attendanceData with the modified attendanceList
       attendanceData['attendanceList'] = attendanceList;
+      print('session: ${widget.selectedDate}');
 
       // Update the document in Firebase
-      await FirebaseFirestore.instance
-          .collection('attendance')
-          .doc(widget.courseCode)
-          .collection('session')
-          .doc(widget.sessionDocumentId)
-          .update(attendanceData);
-    } catch (error) {
-      print('Error updating Firebase data: $error');
+      await attendanceDocRef.update(attendanceData);
+    } else {
+      print('No document found for the selected date');
     }
+  } catch (error) {
+    print('Error updating Firebase data: $error');
   }
+}
+
 
   // generate the pdf
   Future<Uint8List> buildPdf(
@@ -671,8 +642,6 @@ class EditAttendanceState extends State<EditAttendance> {
         await file.writeAsBytes(pdfBytes);
         print('path: $path');
 
-        // Show a notification
-        // showNotification(path);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('PDF saved at: $path'),
@@ -687,23 +656,3 @@ class EditAttendanceState extends State<EditAttendance> {
     }
   }
 
-
-// Future<void> showNotification(String pdfPath) async {
-//   await AwesomeNotifications().createNotification(
-//     content: NotificationContent(
-//       id: 0,
-//       channelKey: 'basic_channel',
-//       title: 'PDF Generated',
-//       body: 'Tap to Open!',
-//       actionType: ActionType.Default,
-//       notificationLayout: NotificationLayout.BigText,
-//       payload: {'pdfPath': pdfPath},
-//     ),
-//     actionButtons: [
-//       NotificationActionButton(
-//         key: 'openPdfAction',
-//         label: 'Open PDF',
-//       ),
-//     ],
-//   );
-// }

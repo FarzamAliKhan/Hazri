@@ -49,7 +49,7 @@ class _AddUserState extends State<AddUser> with WidgetsBindingObserver {
   CameraController _camera;
   Detector _currentDetector = Detector.face;
   bool _isDetecting = false;
-  CameraLensDirection _direction = CameraLensDirection.back;
+  CameraLensDirection _direction = CameraLensDirection.front;
   bool _faceFound = false;
   bool _camPos = false; //FALSE means Front Camera and TRUE means Back Camera
   String _displayBase64FaceImage = "";

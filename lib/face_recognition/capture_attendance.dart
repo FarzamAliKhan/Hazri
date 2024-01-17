@@ -55,7 +55,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
   CameraController _camera;
   Detector _currentDetector = Detector.face;
   bool _isDetecting = false;
-  final CameraLensDirection _direction = CameraLensDirection.back;
+  final CameraLensDirection _direction = CameraLensDirection.front;
   bool _faceFound = false;
   bool _camPos = false; //FALSE means Front Camera and TRUE means Back Camera
   String _displayBase64FaceImage = "";

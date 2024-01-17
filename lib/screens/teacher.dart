@@ -169,18 +169,6 @@ class _TeacherState extends State<Teacher> {
                                 color: Color(0xff508AA8),
                               ),
                             ),
-                            InkWell(
-                              onTap: () {},
-                              child: const DashComp(
-                                name: "Generate Report",
-                                icon: Icon(
-                                  Icons.receipt_outlined,
-                                  color: Colors.white,
-                                  size: 60,
-                                ),
-                                color: Color(0xff508AA8),
-                              ),
-                            )
                           ],
                         ),
                       )
