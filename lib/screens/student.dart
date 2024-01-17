@@ -97,7 +97,13 @@ class _StudentState extends State<Student> {
                               ),
                             ),
                             InkWell(
-                              onTap: (){},
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            StudentAttendance(studentName: userName, roleType: "Report Generate",)));
+                              },
                               child: const DashComp(
                                 name: "Generate Report",
                                 icon: Icon(Icons.receipt_outlined, color: Colors.white, size: 60,),

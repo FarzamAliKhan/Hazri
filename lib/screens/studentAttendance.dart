@@ -19,8 +19,9 @@ import 'package:intl/intl.dart';
 
 class StudentAttendance extends StatefulWidget {
   final String studentName; // Add a parameter for the student ID
+  final String roleType; // Add a parameter for the student ID
 
-  const StudentAttendance({Key key, @required this.studentName});
+  const StudentAttendance({Key key, @required this.studentName, this.roleType});
 
   @override
   StudentAttendanceState createState() => StudentAttendanceState();
@@ -373,13 +374,14 @@ Future<List<Map<String, dynamic>>> getOverallAttendanceData(String studentName) 
             ),
           ]
               : []),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: widget.roleType == "Report Generate"
+        ? FloatingActionButton(
         backgroundColor: AppColors.secondaryColor,
         tooltip: 'Print Document',
         onPressed: () async {
           // Wait for the attendanceData Future to complete
           List<Map<String, dynamic>> snapshot =
-          await attendanceData;
+              await attendanceData;
           print('attendance: $snapshot');
           // Check if the snapshot contains data
           if (snapshot.isNotEmpty) {
@@ -393,7 +395,8 @@ Future<List<Map<String, dynamic>>> getOverallAttendanceData(String studentName) 
           }
         },
         child: const Icon(Icons.print, color: Colors.white),
-      ),
+      )
+    : null,
       body: FutureBuilder<List<Map<String, dynamic>>>(
   future: attendanceData,
   builder: (context, snapshot) {
