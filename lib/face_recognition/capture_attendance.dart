@@ -104,7 +104,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
 
   Future loadModel() async {
     try {
-      this.interpreter =
+      interpreter =
           await tfl.Interpreter.fromAsset('assets/mobilefacenet.tflite');
 
       print(
@@ -251,6 +251,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
     }
 
     CustomPainter painter;
+
 
     final Size imageSize = Size(
       _camera.value.previewSize.height,

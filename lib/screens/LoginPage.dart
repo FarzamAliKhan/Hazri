@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/clipper.dart';
 import 'package:hazri2/global/clipper2.dart';
@@ -53,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                   left: 30,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         "LOGIN",
                         style: TextStyle(
@@ -197,7 +196,10 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             }
                           } catch (e) {
-                            print('Error during login: $e');
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Error during login: $e'),
+                                duration: const Duration(seconds: 5),
+                              ));
                             // Handle login error (e.g., show error message)
                           }
                         }

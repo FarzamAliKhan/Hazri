@@ -55,7 +55,7 @@ class _AddUserState extends State<AddUser> with WidgetsBindingObserver {
     enableLandmarks: true,
     enableContours: true,
     enableTracking: true,
-    enableClassification: false,
+    enableClassification: true,
     mode: FaceDetectorMode.accurate,
   ));
 
@@ -97,7 +97,7 @@ class _AddUserState extends State<AddUser> with WidgetsBindingObserver {
 
   Future loadModel() async {
     try {
-      this.interpreter =
+      interpreter =
           await tfl.Interpreter.fromAsset('assets/mobilefacenet.tflite');
 
       print(
@@ -146,8 +146,8 @@ class _AddUserState extends State<AddUser> with WidgetsBindingObserver {
     await _camera.initialize();
     //Load file from assets directory to store the detected faces
     _savedFacesDir = await getApplicationDocumentsDirectory();
-    String _fullPathSavedFaces = _savedFacesDir.path + '/savedFaces.json';
-    jsonFile = new File(_fullPathSavedFaces);
+    String fullPathSavedFaces = _savedFacesDir.path + '/savedFaces.json';
+    jsonFile = File(fullPathSavedFaces);
 
     if (jsonFile.existsSync()) {
       data = json.decode(jsonFile.readAsStringSync());
