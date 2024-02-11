@@ -217,7 +217,7 @@ class PDFHelper {
                   fontWeight: pw.FontWeight.bold,
                 ),
                 data: [
-                  ['Course Code', 'Total Sessions', 'Present Count', 'Absent Count', 'Attendance Percentage'],
+                  ['Course Code', 'Total Classes', 'Present Count', 'Absent Count', 'Attendance Percentage'],
                   [courseData['courseCode'], courseData['totalSessions'].toString(), courseData['presentCount'].toString(), courseData['absentCount'].toString(), courseData['attendancePercentage'].toString()],
                 ],
               ),
