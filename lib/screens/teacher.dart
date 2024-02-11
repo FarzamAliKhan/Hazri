@@ -9,7 +9,6 @@ import 'package:hazri2/screens/DateListScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 
 import '../face_recognition/capture_attendance.dart';
-import 'AttendanceScreen.dart';
 
 class Teacher extends StatefulWidget {
   final String uid;

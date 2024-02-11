@@ -7,14 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import '../global/styles.dart';
 import '../utils/PermissionHelper.dart';
-import 'LoginPage.dart';
+import '../utils/PDFHelper.dart';
+
 import 'package:flutter_editable_table/constants.dart';
 import 'package:flutter_editable_table/flutter_editable_table.dart';
-import 'package:intl/intl.dart';
+
 
 
 class StudentAttendance extends StatefulWidget {
@@ -385,8 +384,9 @@ Future<List<Map<String, dynamic>>> getOverallAttendanceData(String studentName) 
           print('attendance: $snapshot');
           // Check if the snapshot contains data
           if (snapshot.isNotEmpty) {
-            Uint8List pdfBytes = await buildStudentPdf(snapshot);
-            await savePdf(pdfBytes);
+            PDFHelper pdfHelper = PDFHelper();
+            Uint8List pdfBytes = await pdfHelper.buildStudentPdf(snapshot, widget.studentName);
+            await pdfHelper.savePdf(pdfBytes, widget.studentName, context);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('No data found'),
@@ -398,8 +398,8 @@ Future<List<Map<String, dynamic>>> getOverallAttendanceData(String studentName) 
       )
     : null,
       body: FutureBuilder<List<Map<String, dynamic>>>(
-  future: attendanceData,
-  builder: (context, snapshot) {
+        future: attendanceData,
+        builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -485,101 +485,5 @@ Future<List<Map<String, dynamic>>> getOverallAttendanceData(String studentName) 
       ),
     );
   }
-Future<Uint8List> buildStudentPdf(List<Map<String, dynamic>> overallAttendanceList) async {
-  // Create the Pdf document
-  final pw.Document doc = pw.Document();
-
-  // Load the image from assets
-  final Uint8List imageList = (await rootBundle.load('assets/ned_logo.png'))
-      .buffer.asUint8List();
-
-  // Add a page for each course in the overallAttendanceList
-  for (Map<String, dynamic> courseData in overallAttendanceList) {
-    // Add a new page
-    doc.addPage(
-      pw.Page(
-        build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              // Header Section with Logo and Title
-              pw.Row(
-                children: [
-                  pw.Image(pw.MemoryImage(imageList), width: 100, height: 100),
-                  pw.SizedBox(width: 20),
-                  pw.Text('Attendance Report: ${widget.studentName}', style: pw.TextStyle(
-                      fontSize: 20, fontWeight: pw.FontWeight.bold)),
-                ],
-              ),
-              pw.SizedBox(height: 20),
-
-              // Course Information Table
-              pw.Table.fromTextArray(
-                context: context,
-                border: null,
-                cellAlignment: pw.Alignment.centerLeft,
-                headerDecoration: const pw.BoxDecoration(
-                  borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
-                  color: PdfColors.grey300,
-                ),
-                headerHeight: 25,
-                cellHeight: 25,
-                cellAlignments: {
-                  0: pw.Alignment.centerLeft,
-                  1: pw.Alignment.centerLeft,
-                  2: pw.Alignment.centerLeft,
-                  3: pw.Alignment.centerLeft,
-                  4: pw.Alignment.centerLeft,
-                },
-                headerStyle: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                ),
-                data: [
-                  ['Course Code', 'Total Sessions', 'Present Count', 'Absent Count', 'Attendance Percentage'],
-                  [courseData['courseCode'], courseData['totalSessions'].toString(), courseData['presentCount'].toString(), courseData['absentCount'].toString(), courseData['attendancePercentage'].toString()],
-                ],
-              ),
-
-              pw.SizedBox(height: 20),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  // Build and return the final Pdf file data
-  return await doc.save();
 }
-
-  // save the pdf using provider in system path
-  Future<void> savePdf(Uint8List pdfBytes) async {
-    final granted = await PermissionHelper.requestStoragePermissions();
-      // Get the list of external storage directories
-      Directory directories = await getExternalStorageDirectory();
-      Directory generalDownloadDir = Directory(
-          '/storage/emulated/0/Download'); // THIS WORKS for android only !!!!!!
-
-      print('directory: $directories');
-      // Check if there's a valid directory in the list
-      //if (directories != null && directories.isNotEmpty) {
-        // Use the first directory in the list
-        //final Directory directory = directories[0];
-        final String path = '${generalDownloadDir.path}/attendance_report.pdf';
-
-        // Save the Pdf file
-        final File file = File(path);
-        await file.writeAsBytes(pdfBytes);
-        print('path: $path');
-
-        // Show a notification
-        // showNotification(path);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('PDF saved at: $path'),
-          duration: Duration(seconds: 5),
-        ));
-
-      }
-    }
 

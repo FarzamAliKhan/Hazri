@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'EditAttendance.dart';
+import 'AttendanceScreen.dart';
 import 'package:intl/intl.dart';
 
 
@@ -183,7 +183,7 @@ class _DateListScreenState extends State<DateListScreen> {
                                         courseCode: 'SE-312',
                                         sessionDocumentId: 'session',
                                         selectedDate: '${value[index]}',
-                                        RoleType: "Edit Attendance",
+                                        roleType: "Edit Attendance",
                                       ),
                                     ),
                                   )
@@ -195,7 +195,7 @@ class _DateListScreenState extends State<DateListScreen> {
                                         courseCode: 'SE-312',
                                         sessionDocumentId: 'session',
                                         selectedDate: '${value[index]}',
-                                        RoleType: "View Attendance",
+                                        roleType: "View Attendance",
                                       ),
                                     ),
                                   )

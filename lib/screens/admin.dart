@@ -6,10 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/face_recognition/view_label.dart';
 import 'package:hazri2/global/DashButton.dart';
-import 'package:hazri2/screens/AttendanceScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
-
-import '../face_recognition/capture_attendance.dart';
 import 'package:hazri2/face_recognition/add_user.dart';
 
 import 'DateListScreen.dart';

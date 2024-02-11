@@ -4,7 +4,7 @@ class PermissionHelper {
   static Future<bool> requestStoragePermissions() async {
     var status = await Permission.storage.status;
     if (!status.isGranted) {
-      status = await Permission.storage.request();
+      status = await Permission.manageExternalStorage.request();
     }
     return status == PermissionStatus.granted;
   }
