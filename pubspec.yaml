@@ -48,13 +48,13 @@ dependencies:
   tflite_flutter: ^0.10.4  #0.10.4   #0.9.2
   font_awesome_flutter: ^10.4.0
   permission_handler: ^11.0.1
-  share_plus: ^7.2.1
 
   dynamic_table: ^0.0.1-beta
   flutter_editable_table: ^1.1.2
   pdf: ^3.10.1
   table_calendar: ^3.0.9
   calendar_view: ^1.0.4
+  flutter_animate: ^4.5.0
 
 
 dev_dependencies:

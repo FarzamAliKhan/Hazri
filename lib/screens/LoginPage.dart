@@ -10,6 +10,8 @@ import 'package:hazri2/screens/admin.dart';
 import 'package:hazri2/screens/student.dart';
 import 'package:hazri2/screens/teacher.dart';
 
+import '../global/styles.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
 
@@ -48,35 +50,32 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Positioned(
-                  top: 220,
-                  left: 30,
+                  top: 200,
+                  left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
-                        "LOGIN",
+                        "Welcome to Hazri NED",
                         style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 26),
+                            fontWeight: FontWeight.w400, fontSize: 17),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Text(
-                        "Please sign in to continue",
+                        "LOGIN",
                         style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 17),
-                      )
+                            fontWeight: FontWeight.w800, fontSize: 26),
+                      ),
                     ],
                   ),
                 )
               ],
             ),
-            Padding(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 28),
+            FractionallySizedBox(
+              widthFactor: 0.9,
               child: Column(children: [
-                const SizedBox(
-                  height: 25,
-                ),
                 Form(
                   key: _formKey,
                   child: Column(children: [
@@ -96,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                              color: Color(0xff9DD1F1), width: 3.0),
+                              color: AppColors.primaryColor, width: 3.0),
                         ),
                       ),
                       validator: (value) {
@@ -131,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                              color: Color(0xff9DD1F1), width: 3.0),
+                              color: AppColors.primaryColor, width: 3.0),
                         ),
                       ),
                       validator: (value) {
@@ -147,95 +146,93 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 30,
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          try {
-                            UserCredential userCredential =
-                                await _auth.signInWithEmailAndPassword(
-                                    email: _email, password: _password);
+                    FractionallySizedBox(
+                      widthFactor: 1.0,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            try {
+                              UserCredential userCredential =
+                                  await _auth.signInWithEmailAndPassword(
+                                      email: _email, password: _password);
 
-                            if (userCredential.user != null) {
-                              String userId = userCredential.user.uid;
+                              if (userCredential.user != null) {
+                                String userId = userCredential.user.uid;
 
-                              DocumentSnapshot userDoc = await _firestore
-                                  .collection('users')
-                                  .doc(userId)
-                                  .get();
-                              if (userDoc.exists) {
-                                UserModel user = UserModel.fromJson(
-                                    userDoc.data() as Map<String, dynamic>);
+                                DocumentSnapshot userDoc = await _firestore
+                                    .collection('users')
+                                    .doc(userId)
+                                    .get();
+                                if (userDoc.exists) {
+                                  UserModel user = UserModel.fromJson(
+                                      userDoc.data() as Map<String, dynamic>);
 
-                                // Navigate to appropriate screen based on role
-                                // For example:
-                                if (user.role == 'Student') {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Student(
-                                                uid: userCredential.user.uid,
-                                              )));
-                                } else if (user.role == 'Teacher') {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Teacher(
-                                                uid: userCredential.user.uid,
-                                              )));
-                                  // Navigate to TeacherScreen
-                                } else if (user.role == 'Admin') {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Admin(
-                                              uid: userCredential.user.uid)));
-                                  // Navigate to AdminScreen
+                                  // Navigate to appropriate screen based on role
+                                  // For example:
+                                  if (user.role == 'Student') {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Student(
+                                                  uid: userCredential.user.uid,
+                                                )));
+                                  } else if (user.role == 'Teacher') {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Teacher(
+                                                  uid: userCredential.user.uid,
+                                                )));
+                                    // Navigate to TeacherScreen
+                                  } else if (user.role == 'Admin') {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Admin(
+                                                uid: userCredential.user.uid)));
+                                    // Navigate to AdminScreen
+                                  }
                                 }
                               }
-                            }
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            } catch (e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text('Error during login: $e'),
                                 duration: const Duration(seconds: 5),
                               ));
-                            // Handle login error (e.g., show error message)
+                              // Handle login error (e.g., show error message)
+                            }
                           }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff9DD1F1),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondaryColor,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
-                      ),
-                      child:  Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: Text(
-                          "Log In",
-                          style: GoogleFonts.ubuntu(
-                  color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
-            
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            "Log In",
+                            style: GoogleFonts.ubuntu(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17),
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(
-                      height: 140,
+                      height: 30,
                     ),
                   ]),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Don't have an account?",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black),
-                    ),
                     InkWell(
                       onTap: () {
                         Navigator.pushReplacement(
@@ -244,11 +241,11 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const SignUpPage()));
                       },
                       child: const Text(
-                        "SIGN UP",
+                        "Don't have an account?",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xff9DD1F1)),
+                            color: AppColors.secondaryColor),
                       ),
                     ),
                   ],

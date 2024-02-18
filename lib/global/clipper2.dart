@@ -1,12 +1,17 @@
 // @dart=2.9
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hazri2/global/styles.dart';
+import 'dart:ui' as ui;
+
 
 class PSCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint0 = Paint()
-      ..color = Color.fromARGB(255, 179, 219, 243)
+      ..color = AppColors.primaryColor
       ..style = PaintingStyle.fill
       ..strokeWidth = 1;
 
@@ -37,10 +42,15 @@ class PSCustomPainter extends CustomPainter {
     path0.close();
 
     canvas.drawPath(path0, paint0);
+
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
-}
+
+  }
+
+
+

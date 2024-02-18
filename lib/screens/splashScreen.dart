@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 
-
+import '../global/styles.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,24 +28,29 @@ class _SplashScreenState extends State<SplashScreen> {
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white, // Set your desired background color here
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset("assets/hazri-logo.png"),
-            const SizedBox(height: 10),
-            // Adjust the height based on your preference
-            const Text(
-              'Facial Recognition Based Student Attendance',
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 17,
+      body: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+              color: Colors.white70),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset("assets/hazri-logo.png"),
+              const SizedBox(height: 10),
+              const Text(
+                'NED',
+                style: TextStyle(
+                  color: AppColors.textColor,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 27,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center, // Align the text to the center
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

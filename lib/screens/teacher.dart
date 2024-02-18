@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/DashButton.dart';
 import 'package:hazri2/screens/DateListScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
-
 import '../face_recognition/capture_attendance.dart';
 
 class Teacher extends StatefulWidget {

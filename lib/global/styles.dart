@@ -26,10 +26,9 @@ class AppColors {
     end: Alignment.bottomRight,
   );
 
-  static const LinearGradient secondaryGradient = LinearGradient(
-    colors: [Color(0xFF508AA8), Color(0xFFC8E0F4)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+  static const RadialGradient secondaryGradient = RadialGradient(
+    colors: [CupertinoColors.white, Color(0xFF508AA8), ],
+    radius: 2.5,
   );
 
   static const LinearGradient accentGradient = LinearGradient(
