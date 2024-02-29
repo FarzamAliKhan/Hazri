@@ -2,13 +2,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/clipper.dart';
 import 'package:hazri2/global/clipper2.dart';
+import 'package:hazri2/screens/Teacher/teacher_nav_bar.dart';
 import 'package:hazri2/screens/SignUpPage.dart';
-import 'package:hazri2/screens/admin.dart';
-import 'package:hazri2/screens/student.dart';
-import 'package:hazri2/screens/teacher.dart';
+import 'package:hazri2/screens/Admin/admin.dart';
+import 'package:hazri2/screens/Student/student.dart';
+import 'package:hazri2/screens/Teacher/teacher.dart';
 
 import '../global/styles.dart';
 
@@ -60,13 +63,12 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 17),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Text(
                         "LOGIN",
                         style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 26),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w800, fontSize: 26)
                       ),
                     ],
                   ),
@@ -88,14 +90,14 @@ class _LoginPageState extends State<LoginPage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 5.0,
+                            color: Colors.blue,
+                            width: 10,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                              color: AppColors.primaryColor, width: 3.0),
+                              color: AppColors.secondaryColor, width: 1.5),
                         ),
                       ),
                       validator: (value) {
@@ -123,14 +125,14 @@ class _LoginPageState extends State<LoginPage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 5.0,
+                            color: Colors.white70,
+                            width: 0.5,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
-                              color: AppColors.primaryColor, width: 3.0),
+                              color: AppColors.secondaryColor, width: 1.5),
                         ),
                       ),
                       validator: (value) {
@@ -168,40 +170,24 @@ class _LoginPageState extends State<LoginPage> {
                                 if (userDoc.exists) {
                                   UserModel user = UserModel.fromJson(
                                       userDoc.data() as Map<String, dynamic>);
-
                                   // Navigate to appropriate screen based on role
                                   // For example:
                                   if (user.role == 'Student') {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Student(
-                                                  uid: userCredential.user.uid,
-                                                )));
+                                    Get.off(Student(uid: userCredential.user.uid));
                                   } else if (user.role == 'Teacher') {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Teacher(
-                                                  uid: userCredential.user.uid,
-                                                )));
+                                    // navigates to a screen without context and .off does not allow to
+                                    // go back to the previous screen
+                                    Get.off(TeacherNavMenu(uid: userCredential.user.uid));
                                     // Navigate to TeacherScreen
                                   } else if (user.role == 'Admin') {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Admin(
-                                                uid: userCredential.user.uid)));
+                                    Get.off(Admin(uid: userCredential.user.uid));
                                     // Navigate to AdminScreen
                                   }
                                 }
                               }
                             } catch (e) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text('Error during login: $e'),
-                                duration: const Duration(seconds: 5),
-                              ));
+                              //Get version of snack-bar
+                              Get.snackbar('Error during login','$e', duration: const Duration(seconds: 3));
                               // Handle login error (e.g., show error message)
                             }
                           }

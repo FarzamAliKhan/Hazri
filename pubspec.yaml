@@ -55,6 +55,8 @@ dependencies:
   table_calendar: ^3.0.9
   calendar_view: ^1.0.4
   flutter_animate: ^4.5.0
+  get: ^4.6.0
+  get_storage: ^2.0.3
 
 
 dev_dependencies:

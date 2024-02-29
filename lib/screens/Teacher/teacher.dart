@@ -3,11 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/DashButton.dart';
+import 'package:hazri2/screens/Teacher/teacher_nav_bar.dart';
 import 'package:hazri2/screens/DateListScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
-import '../face_recognition/capture_attendance.dart';
+import '../../face_recognition/capture_attendance.dart';
+import '../../global/styles.dart';
 
 class Teacher extends StatefulWidget {
   final String uid;
@@ -18,6 +22,7 @@ class Teacher extends StatefulWidget {
 }
 
 class _TeacherState extends State<Teacher> {
+  int currentPageIndex = 0;
   Future<DocumentSnapshot<Map<String, dynamic>>> userData;
 
   @override
@@ -68,7 +73,7 @@ class _TeacherState extends State<Teacher> {
                         MaterialPageRoute(
                             builder: (context) => const LoginPage()));
                   }).onError((error, stackTrace) {
-                    print("Error");
+                    Get.snackbar('Error', '$error');
                   });
                 },
               )

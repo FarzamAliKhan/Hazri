@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/dashButton.dart';
 import 'package:hazri2/screens/LoginPage.dart';
-import 'package:hazri2/screens/studentAttendance.dart';
+import 'package:hazri2/screens/Student/studentAttendance.dart';
 
 class Student extends StatefulWidget {
   final String uid;

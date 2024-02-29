@@ -9,7 +9,7 @@ import 'package:hazri2/global/DashButton.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 import 'package:hazri2/face_recognition/add_user.dart';
 
-import 'DateListScreen.dart';
+import '../DateListScreen.dart';
 
 
 class Admin extends StatefulWidget {

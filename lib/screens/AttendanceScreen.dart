@@ -11,6 +11,8 @@ import '../utils/PDFHelper.dart';
 import 'package:flutter_editable_table/constants.dart';
 import 'package:flutter_editable_table/flutter_editable_table.dart';
 
+import 'Teacher/teacher_nav_bar.dart';
+
 
 
 class EditAttendance extends StatefulWidget {
@@ -104,7 +106,6 @@ class EditAttendanceState extends State<EditAttendance> {
         // Add other relevant fields here
       });
     });
-
     return rows;
   }
 
@@ -338,6 +339,7 @@ class EditAttendanceState extends State<EditAttendance> {
               ),
             ),
           ] : []),
+      bottomNavigationBar: TeacherNavMenu(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.secondaryColor,
         tooltip: 'Print Document',

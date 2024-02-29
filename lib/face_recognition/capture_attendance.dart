@@ -10,6 +10,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiver/collection.dart';
 import 'package:image/image.dart' as imglib;
@@ -41,7 +43,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
   Directory _savedFacesDir;
   List _predictedData;
   tfl.Interpreter interpreter;
-  final TextEditingController _name = new TextEditingController();
+  final TextEditingController _name = TextEditingController();
   dynamic _scanResults;
   CameraController _camera;
   Detector _currentDetector = Detector.face;
@@ -131,9 +133,9 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
 
     _camera = CameraController(
       description,
-      defaultTargetPlatform == TargetPlatform.iOS
-          ? ResolutionPreset.low
-          : ResolutionPreset.low,
+      defaultTargetPlatform == TargetPlatform.android
+          ? ResolutionPreset.high
+          : ResolutionPreset.high,
       enableAudio: false,
     );
 
@@ -152,12 +154,12 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
     await _camera.initialize();
     //Load file from assets directory to store the detected faces
     _savedFacesDir = await getApplicationDocumentsDirectory();
-    String _fullPathSavedFaces = _savedFacesDir.path + '/savedFaces.json';
-    jsonFile = new File(_fullPathSavedFaces);
+    String fullPathSavedFaces = '${_savedFacesDir.path}/savedFaces.json';
+    jsonFile = File(fullPathSavedFaces);
 
     if (jsonFile.existsSync()) {
       data = json.decode(jsonFile.readAsStringSync());
-      print('Saved faced from memory: ' + data.toString());
+      print('Saved faces from memory: ' + data.toString());
     }
     await _camera.startImageStream((CameraImage image) {
       if (_isDetecting) return;
@@ -340,7 +342,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
             icon: const Icon(Icons.arrow_back_ios_new_outlined),
             color: Colors.white,
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
           ),
           automaticallyImplyLeading: true,
