@@ -1,16 +1,63 @@
-# hazri2
+# Hazri - RealTime Facial Recognition Based Attendance Management
 
-A new Flutter project.
+[![GitHub license](https://img.shields.io/github/license/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/issues)
+[![GitHub stars](https://img.shields.io/github/stars/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/network)
 
-## Getting Started
+## Description
 
-This project is a starting point for a Flutter application.
+A brief description of your Flutter app.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Feature 1
+- Feature 2
+- Feature 3
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+
+![Screenshot 1](/screenshots/screenshot1.png)
+![Screenshot 2](/screenshots/screenshot2.png)
+![Screenshot 3](/screenshots/screenshot3.png)
+
+## Technologies Used
+
+- Flutter :smile:
+- Dart
+- Any other relevant technologies
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/YourUsername/YourRepo.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd YourRepo
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   flutter pub get
+   ```
+
+4. Run the app:
+
+   ```bash
+   flutter run
+   ```
+
+## Contributing
+
+Contributions are welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md) for more information.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
