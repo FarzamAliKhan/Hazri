@@ -1,9 +1,10 @@
 # Hazri - RealTime Facial Recognition Based Attendance Management
 
-[![GitHub license](https://img.shields.io/github/license/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/blob/main/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/issues)
-[![GitHub stars](https://img.shields.io/github/stars/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/YourUsername/YourRepo)](https://github.com/YourUsername/YourRepo/network)
+[![GitHub license](https://img.shields.io/github/license/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/issues)
+[![GitHub stars](https://img.shields.io/github/stars/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/network)
+
 
 ## Description
 
