@@ -48,7 +48,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
   CameraController _camera;
   Detector _currentDetector = Detector.face;
   bool _isDetecting = false;
-  final CameraLensDirection _direction = CameraLensDirection.front;
+  CameraLensDirection _direction = CameraLensDirection.front;
   bool _faceFound = false;
   bool _camPos = false; //FALSE means Front Camera and TRUE means Back Camera
   String _displayBase64FaceImage = "";
@@ -262,6 +262,8 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
 
     assert(_currentDetector == Detector.face);
 
+    painter = FaceDetectorNormalPainter(imageSize, _scanResults, _camPos);
+
     return CustomPaint(
       painter: painter,
     );
@@ -326,6 +328,28 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
     );
   }
 
+
+  Future<void> _toggleCameraDirection() async {
+
+    if (_direction == CameraLensDirection.back) {
+      _direction = CameraLensDirection.front;
+      _camPos = false;
+    } else {
+      _direction = CameraLensDirection.back;
+      _camPos = true;
+    }
+
+    await _camera.stopImageStream();
+    await _camera.dispose();
+
+    setState(() {
+      _camera = null;
+    });
+
+    await _initializeCamera();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -350,87 +374,87 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
         body: _buildStack(),
         floatingActionButton:
             Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-          FloatingActionButton(
-            shape: const CircleBorder(),
-            backgroundColor:
-                (_faceFound) ? const Color(0xff508AA8) : Colors.blueGrey[300],
-            child: const Icon(
-              Icons.camera_sharp,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              if (_faceFound) {
-                setState(() {
-                  _camera = null;
-                });
+              FloatingActionButton(
+                  shape: const CircleBorder(),
+                  backgroundColor:
+                      (_faceFound) ? const Color(0xff508AA8) : Colors.blueGrey[300],
+                  child: const Icon(
+                    Icons.camera_sharp,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    if (_faceFound) {
+                      setState(() {
+                        _camera = null;
+                      });
 
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      backgroundColor: const Color(0xff508AA8),
-                      title: Text(
-                        'Mark Attendance',
-                        style: GoogleFonts.ubuntu(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      scrollable: true,
-                      content: Column(
-                        children: [
-                          const Divider(color: Colors.white, thickness: 2),
-                          if (uniqueRecognizedFaceNames.isEmpty)
-                            const Text('No faces recognized yet.'),
-                          for (String faceName in uniqueRecognizedFaceNames)
-                            if (faceName != "NOT RECOGNIZED")
-                              ListTile(
-                                title: Text(
-                                  faceName,
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              backgroundColor: const Color(0xff508AA8),
+                              title: Text(
+                                  'Mark Attendance',
                                   style: GoogleFonts.ubuntu(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  color: Colors.white, fontWeight: FontWeight.bold),
+                                   ),
+                             scrollable: true,
+                             content: Column(
+                                children: [
+                                    const Divider(color: Colors.white, thickness: 2),
+                                    if (uniqueRecognizedFaceNames.isEmpty)
+                                      const Text('No faces recognized yet.'),
+                                    for (String faceName in uniqueRecognizedFaceNames)
+                                      if (faceName != "NOT RECOGNIZED")
+                                        ListTile(
+                                          title: Text(
+                                            faceName,
+                                            style: GoogleFonts.ubuntu(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                     ],
+                                  ),
+                             actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      uniqueRecognizedFaceNames.clear();
+                                      _initializeCamera();
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                        'Close',
+                                        style: GoogleFonts.ubuntu(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                              TextButton(
+                                onPressed: () async {
+                                  await markAttendance(widget.teacherId, 'SE-312',
+                                      uniqueRecognizedFaceNames);
+                                  uniqueRecognizedFaceNames.clear();
+                                  _initializeCamera();
+                                  Navigator.pop(context);
+                                },
+                                  child: Text(
+                                    'Save',
+                                    style: GoogleFonts.ubuntu(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            uniqueRecognizedFaceNames.clear();
-                            _initializeCamera();
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Close',
-                            style: GoogleFonts.ubuntu(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            await markAttendance(widget.teacherId, 'SE-312',
-                                uniqueRecognizedFaceNames);
-                            uniqueRecognizedFaceNames.clear();
-                            _initializeCamera();
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Save',
-                            style: GoogleFonts.ubuntu(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }
-            },
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+                               ],
+                            );
+                         },
+                       );
+                      }
+                    },
+                  ),
+              const SizedBox(
+                height: 10,
+              ),
         ]));
   }
 
