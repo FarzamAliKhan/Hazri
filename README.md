@@ -1,9 +1,17 @@
+<h1 align="center">Welcome to Hazri - RealTime Facial Recognition Based Student Attendance Management Flutter App 👋</h1>
+<div align="center">
+   
+  [![GitHub license](https://img.shields.io/github/license/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/blob/main/LICENSE) 
+  ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
+  ![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
+  ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
+  ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
+
+</div>
+
+
 # Hazri - RealTime Facial Recognition Based Attendance Management
 
-[![GitHub license](https://img.shields.io/github/license/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/blob/main/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/issues)
-[![GitHub stars](https://img.shields.io/github/stars/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/network)
 
 
 ## Description
