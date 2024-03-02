@@ -42,30 +42,20 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/YourUsername/YourRepo.git
+   git clone https://github.com/FarzamAliKhan/Hazri.git
    ```
 
-2. Navigate to the project directory:
-
-   ```bash
-   cd YourRepo
-   ```
-
-3. Install dependencies:
+2. Install dependencies:
 
    ```bash
    flutter pub get
    ```
 
-4. Run the app:
+3. Run the app:
 
    ```bash
    flutter run
    ```
-
-## Contributing
-
-Contributions are welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md) for more information.
 
 ## License
 
