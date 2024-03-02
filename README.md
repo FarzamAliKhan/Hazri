@@ -65,6 +65,10 @@
    ```bash
    flutter run
    ```
+> Testing Credentials:
+> - Teacher: sana12@gmail.com / 123456789
+> - Admin: adnan@gmail.com / 123456
+> - Student: farzam@gmail.com / 123456
 
 ## Contributions 🤝
 
