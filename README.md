@@ -9,32 +9,34 @@
 
 </div>
 
-
-# Hazri - RealTime Facial Recognition Based Attendance Management
-
-
-
-## Description
-
-A brief description of your Flutter app.
+> Flutter app which aims to automate manual attendance marking using `facial recognition` in eduactional institutes.
 
 ## Features
 
-- Feature 1
-- Feature 2
-- Feature 3
+- **Teacher Dashboard**: Mark student attendance in class using Mobile Camera. 📱 📸 🧑‍🏫
+- **Student Dashboard**: View personal attendance. 📱 🧑‍🎓
+- **Admin Dashboard**: Add & Manage faces added into the system. 📱 👨‍💼
+- **Facial Recognition**: Utilizes Google's FaceNet mobile model for accurate Facial Recognition 🙎
+- **Real-time Tracking**: Tracks attendance in real-time during classes using Firebase. 📂
+- **Manual Entry**: Allows manual attendance entry by teachers and admins. 📑
+- **Reports**: Generates attendance reports in PDF format for analysis. 📒
 
+ ## Technologies Used
+
+- Flutter 3.19 
+- Dart 2.19.6
+- Google FaceNet Model
+- Firebase
+- Tensorflow
+- GetX
+
+  
 ## Screenshots
 
 ![Screenshot 1](/screenshots/screenshot1.png)
 ![Screenshot 2](/screenshots/screenshot2.png)
 ![Screenshot 3](/screenshots/screenshot3.png)
 
-## Technologies Used
-
-- Flutter :smile:
-- Dart
-- Any other relevant technologies
 
 ## Installation
 
