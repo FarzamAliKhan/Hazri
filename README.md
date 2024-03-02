@@ -31,11 +31,13 @@
 - GetX
   
 ## Screenshots
-
-![Screenshot 1](/assets/Screenshots/Login.png)
-![Screenshot 2](/screenshots/screenshot2.png)
-![Screenshot 3](/screenshots/screenshot3.png)
-
+<div align= "center"> 
+   
+   <img src="/assets/Screenshots/Login.PNG" alt="Image Description" width="305"/> 
+   <img src="/assets/Screenshots/Signup.PNG" alt="Image Description" width="300"/>
+   <img src="/assets/Screenshots/student_attendance.PNG" alt="Image Description" width="335"/>
+   
+</div>
 
 ## Installation
 
