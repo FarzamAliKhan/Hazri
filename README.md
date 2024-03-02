@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Hazri - RealTime Facial Recognition Based Student Attendance Management Flutter App 👋</h1>
+<h1 align="center">Welcome to Hazri 👋 - RealTime Facial Recognition Based Student Attendance Management Flutter App </h1>
 <div align="center">
    
   [![GitHub license](https://img.shields.io/github/license/FarzamAliKhan/Hazri)](https://github.com/FarzamAliKhan/Hazri/blob/main/LICENSE) 
@@ -9,9 +9,12 @@
 
 </div>
 
-> Flutter app which aims to automate manual attendance marking using `facial recognition` in eduactional institutes.
+> Flutter app which aims to automate manual attendance marking using `facial recognition` in eduactional institutes. <br>
+> Currently configured for NED University as sample.
 
-## Features
+> Leave a star 🌟 if you find it useful 🙂
+
+## Features 🌠
 
 - **Teacher Dashboard**: Mark student attendance in class using Mobile Camera. 📱 📸 🧑‍🏫
 - **Student Dashboard**: View personal attendance. 📱 🧑‍🎓
@@ -21,7 +24,7 @@
 - **Manual Entry**: Allows manual attendance entry by teachers and admins. 📑
 - **Reports**: Generates attendance reports in PDF format for analysis. 📒
 
- ## Technologies Used
+ ## Technologies Used 💻
 
 - Flutter 3.19 
 - Dart 2.19.6
@@ -29,8 +32,10 @@
 - Firebase
 - Tensorflow
 - GetX
+
+## Demo
   
-## Screenshots
+## Screenshots 🖼️
 <div align= "center"> 
    
    <img src="/assets/Screenshots/Login.PNG" alt="Image Description" width="305"/> 
@@ -39,7 +44,9 @@
    
 </div>
 
-## Installation
+## Usage 🚀
+
+> Make sure you are using Dart < 3 (future upgrade to dart 3.0)
 
 1. Clone the repository:
 
@@ -59,7 +66,11 @@
    flutter run
    ```
 
-## License
+## Contributions 🤝
+
+Suggestions & Contributions are always welcomed, raise an issue or contact me. @FarzamAliKhan
+
+## License 📒
 
 This project is licensed under the [MIT License](LICENSE).
 
