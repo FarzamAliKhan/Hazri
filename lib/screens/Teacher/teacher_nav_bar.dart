@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -6,7 +7,7 @@ import 'package:hazri2/global/styles.dart';
 import 'package:hazri2/screens/AttendanceScreen.dart';
 import 'package:hazri2/screens/DateListScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
-
+import 'package:hazri2/screens/UserProfileScreen.dart';
 import 'teacher.dart';
 
 class TeacherNavMenu extends StatelessWidget {
@@ -37,7 +38,7 @@ class TeacherNavMenu extends StatelessWidget {
             NavigationDestination(
                 selectedIcon: Icon(Icons.add_a_photo, color: AppColors.secondaryColor, ),
                 icon: Icon(Icons.add_a_photo_outlined, ),
-                label: ('Attendance'),
+                label: 'Attendance',
             ),
             NavigationDestination(
                 selectedIcon: Icon(Icons.remove_red_eye_sharp, color: AppColors.secondaryColor ),
@@ -62,11 +63,16 @@ class TeacherNavMenu extends StatelessWidget {
   }
 }
 
+Future<DocumentSnapshot<Map<String, dynamic>>> getUserData(String uid) async {
+    return FirebaseFirestore.instance.collection('users').doc(uid).get();
+  }
+
 class NavigationController extends GetxController{
   // observing value of selectedIndex which is of the type Rx<int> which is by default a type we have to choose for Get
   final Rx<int> selectedIndex = 0.obs;
   final String uid;
   late final List<Widget> screens;
+
 
   //whenever initialized
   NavigationController({required this.uid}){
@@ -75,7 +81,7 @@ class NavigationController extends GetxController{
       Teacher(uid: uid),
       CaptureAttendance(teacherId: uid),
       const DateListScreen(RoleType: "View Attendance"),
-      Container(color: Colors.blue)
+      UserProfileScreen(uid: uid),
     ];
   }
 }

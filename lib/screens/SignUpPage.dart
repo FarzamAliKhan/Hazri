@@ -4,10 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/clipper.dart';
 import 'package:hazri2/global/clipper2.dart';
 import 'package:hazri2/screens/LoginPage.dart';
+import '../global/styles.dart';
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key key}) : super(key: key);
@@ -27,6 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String _confirmPassword = "";
   String _selectedRole = 'Student';
   String _rollNo = "";
+  Rx<bool> enabled = true.obs;
 
   final List<String> _roles = ['Student', 'Teacher', 'Admin'];
 
@@ -35,6 +40,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
@@ -54,11 +60,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   Positioned(
-                    top: 220,
+                    top: 190,
                     left: 30,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "SIGN UP",
                           style: TextStyle(
@@ -78,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(horizontal: 28,),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -123,39 +129,42 @@ class _SignUpPageState extends State<SignUpPage> {
                           const SizedBox(
                             height: 15,
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: "Enter Roll Number",
-                              prefixIcon: const Icon(Icons.numbers_outlined),
-                              contentPadding: const EdgeInsets.only(top: 10),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(
-                                  color: Colors.grey,
-                                  width: 5.0,
+                          Obx (
+                            () =>
+                            TextFormField(enabled: enabled.value,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: "Enter Roll Number",
+                                prefixIcon: const Icon(Icons.numbers_outlined),
+                                contentPadding: const EdgeInsets.only(top: 10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey,
+                                    width: 5.0,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xff9DD1F1), width: 3.0),
                                 ),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(
-                                    color: Color(0xff9DD1F1), width: 3.0),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please enter your roll number';
-                              } else if (value.length < 2 || value.length > 3) {
-                                return "please enter correct roll number";
-                              }
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your roll number';
+                                } else if (value.length < 2 || value.length > 3) {
+                                  return "please enter correct roll number";
+                                }
 
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {
-                                _rollNo = value;
-                              });
-                            },
+                                return null;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  _rollNo = value;
+                                });
+                              },
+                            ),
                           ),
                           const SizedBox(
                             height: 15,
@@ -276,6 +285,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               );
                             }).toList(),
                             onChanged: (value) {
+                              if (value.toString() == 'Student'){
+                                enabled.value = true;
+                              } else if (value.toString() != 'Teacher' || value.toString() != 'Admin') {
+                                enabled.value = false;
+                              }
                               setState(() {
                                 _selectedRole = value.toString();
                               });
@@ -333,18 +347,18 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xff9DD1F1),
+                              backgroundColor: AppColors.secondaryColor,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
                             child:  Padding(
-                              padding: EdgeInsets.all(12.0),
+                              padding: const EdgeInsets.all(12.0),
                               child: Text(
                                 "Sign Up",
                                 style: GoogleFonts.ubuntu(
-                  color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+                              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
             
                               ),
                             ),
@@ -353,18 +367,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 40,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Already have an account?",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
-                        ),
                         InkWell(
                           onTap: () {
                             Navigator.push(
@@ -373,12 +380,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                     builder: (context) => const LoginPage()));
                           },
                           child: const Text(
-                            "SIGN IN",
+                            "Already have an account?",
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
-                                color: Color(0xff9DD1F1)),
+                                color: AppColors.secondaryColor,
                           ),
+                        ),
                         ),
                       ],
                     )

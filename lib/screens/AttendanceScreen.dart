@@ -14,7 +14,6 @@ import 'package:flutter_editable_table/flutter_editable_table.dart';
 import 'Teacher/teacher_nav_bar.dart';
 
 
-
 class EditAttendance extends StatefulWidget {
   final String courseCode;
   final String sessionDocumentId;
@@ -26,7 +25,7 @@ class EditAttendance extends StatefulWidget {
       @required this.courseCode,
       @required this.sessionDocumentId,
       @required this.selectedDate,
-      @required this.roleType});
+      @required this.roleType}) : super(key: key);
 
   @override
   EditAttendanceState createState() => EditAttendanceState();
@@ -58,7 +57,6 @@ class EditAttendanceState extends State<EditAttendance> {
         .get()
         .then((QuerySnapshot<Map<String, dynamic>> snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        print(snapshot.docs.first);
         return snapshot.docs.first;
       } else {
         // Handle the case where no data is found for the selected date
@@ -339,7 +337,7 @@ class EditAttendanceState extends State<EditAttendance> {
               ),
             ),
           ] : []),
-      bottomNavigationBar: TeacherNavMenu(),
+      bottomNavigationBar: const TeacherNavMenu(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.secondaryColor,
         tooltip: 'Print Document',

@@ -2,12 +2,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazri2/global/DashButton.dart';
-import 'package:hazri2/screens/Teacher/teacher_nav_bar.dart';
 import 'package:hazri2/screens/DateListScreen.dart';
 import 'package:hazri2/screens/LoginPage.dart';
 import '../../face_recognition/capture_attendance.dart';
@@ -46,44 +46,11 @@ class _TeacherState extends State<Teacher> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'TEACHER',
-              style: GoogleFonts.ubuntu(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            automaticallyImplyLeading: false,
-            backgroundColor:  const Color(0xff508AA8),
-            centerTitle: true,
-            shadowColor: Colors.blueGrey,
-            leading: const Icon(
-              Icons.person,
-              color: Colors.white,
-            ),
-            actions: [
-              IconButton(
-                icon: const FaIcon(
-                  FontAwesomeIcons.rightFromBracket,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  FirebaseAuth.instance.signOut().then((value) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()));
-                  }).onError((error, stackTrace) {
-                    Get.snackbar('Error', '$error');
-                  });
-                },
-              )
-            ],
-          ),
           body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
               future: userData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                   return const SpinKitFadingCircle(color: AppColors.secondaryColor);
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
@@ -93,7 +60,7 @@ class _TeacherState extends State<Teacher> {
                     children: [
                       DashWelcome(
                         name: '$userName!',
-                        color:  const Color(0xff508AA8),
+                        color:  AppColors.secondaryColor,
                       ),
                       const SizedBox(
                         height: 10,

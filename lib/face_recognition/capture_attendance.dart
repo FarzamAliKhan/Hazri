@@ -13,6 +13,10 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hazri2/global/AppBar.dart';
+import 'package:hazri2/global/styles.dart';
+import 'package:hazri2/screens/Teacher/teacher.dart';
+import 'package:hazri2/screens/Teacher/teacher_nav_bar.dart';
 import 'package:quiver/collection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:camera/camera.dart';
@@ -297,17 +301,18 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
       alignment: const Alignment(-1, 1),
       children: [
         _buildImage(),
-        CircleAvatar(
-          backgroundColor: const Color(0xff9DD1F1),
-          radius: 50,
+        ClipOval(
           child: CircleAvatar(
-            backgroundColor: Colors.black12,
+            backgroundColor: AppColors.backgroundColor,
             //backgroundImage: AssetImage('assets/face.jpg'),
-            foregroundImage:
+            /*foregroundImage:
                 (_displayBase64FaceImage != "" && _faceFound && !_addFaceScreen
                     ? MemoryImage(base64Decode(_displayBase64FaceImage))
-                    : const AssetImage('assets/background.jpg')),
-            radius: 48,
+                    : const AssetImage('assets/hazri-logo.png')),*/
+            radius: 40,
+            child: (_displayBase64FaceImage != "" && _faceFound && !_addFaceScreen
+                    ? MemoryImage(base64Decode(_displayBase64FaceImage))
+                    : Image.asset('assets/hazri-logo.png', fit: BoxFit.cover)),
           ),
         ),
         Container(
@@ -318,7 +323,7 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
             // ignore: prefer_if_null_operators
             (spoofDetectOutput != null ? spoofDetectOutput : _faceName),
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -353,107 +358,96 @@ class _CaptureAttendanceState extends State<CaptureAttendance>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Capture Attendance',
-            style: GoogleFonts.ubuntu(
-                color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: const Color(0xff508AA8),
-          centerTitle: true,
-          shadowColor: Colors.blueGrey,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_outlined),
-            color: Colors.white,
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          automaticallyImplyLeading: true,
-        ),
+        appBar: const CustomAppBar(title:'Capture Attendance'),
         body: _buildStack(),
         floatingActionButton:
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-              FloatingActionButton(
-                  shape: const CircleBorder(),
-                  backgroundColor:
-                      (_faceFound) ? const Color(0xff508AA8) : Colors.blueGrey[300],
-                  child: const Icon(
-                    Icons.camera_sharp,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    if (_faceFound) {
-                      setState(() {
-                        _camera = null;
-                      });
-
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                              backgroundColor: const Color(0xff508AA8),
-                              title: Text(
-                                  'Mark Attendance',
-                                  style: GoogleFonts.ubuntu(
-                                  color: Colors.white, fontWeight: FontWeight.bold),
-                                   ),
-                             scrollable: true,
-                             content: Column(
-                                children: [
-                                    const Divider(color: Colors.white, thickness: 2),
-                                    if (uniqueRecognizedFaceNames.isEmpty)
-                                      const Text('No faces recognized yet.'),
-                                    for (String faceName in uniqueRecognizedFaceNames)
-                                      if (faceName != "NOT RECOGNIZED")
-                                        ListTile(
-                                          title: Text(
-                                            faceName,
+            Column(mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Center(
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: FloatingActionButton(
+                          shape: const CircleBorder(),
+                          backgroundColor: AppColors.secondaryColor,
+                          child: const Icon(
+                            Icons.camera_sharp,
+                            color: AppColors.primaryColor,
+                            size: 60,
+                          ),
+                          onPressed: () async {
+                            if (_faceFound) {
+                              setState(() {
+                                _camera = null;
+                              });
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      backgroundColor: const Color(0xff508AA8),
+                                      title: Text(
+                                          'Mark Attendance',
+                                          style: GoogleFonts.ubuntu(
+                                          color: Colors.white, fontWeight: FontWeight.bold),
+                                           ),
+                                     scrollable: true,
+                                     content: Column(
+                                        children: [
+                                            const Divider(color: Colors.white, thickness: 2),
+                                            if (uniqueRecognizedFaceNames.isEmpty)
+                                              const Text('No faces recognized yet.'),
+                                            for (String faceName in uniqueRecognizedFaceNames)
+                                              if (faceName != "NOT RECOGNIZED")
+                                                ListTile(
+                                                  title: Text(
+                                                    faceName,
+                                                    style: GoogleFonts.ubuntu(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                             ],
+                                          ),
+                                     actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              uniqueRecognizedFaceNames.clear();
+                                              _initializeCamera();
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                                'Close',
+                                                style: GoogleFonts.ubuntu(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          await markAttendance(widget.teacherId, 'SE-312',
+                                              uniqueRecognizedFaceNames);
+                                          uniqueRecognizedFaceNames.clear();
+                                          _initializeCamera();
+                                          Get.back();
+                                        },
+                                          child: Text(
+                                            'Save',
                                             style: GoogleFonts.ubuntu(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
-                                     ],
-                                  ),
-                             actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      uniqueRecognizedFaceNames.clear();
-                                      _initializeCamera();
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                        'Close',
-                                        style: GoogleFonts.ubuntu(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                              TextButton(
-                                onPressed: () async {
-                                  await markAttendance(widget.teacherId, 'SE-312',
-                                      uniqueRecognizedFaceNames);
-                                  uniqueRecognizedFaceNames.clear();
-                                  _initializeCamera();
-                                  Navigator.pop(context);
-                                },
-                                  child: Text(
-                                    'Save',
-                                    style: GoogleFonts.ubuntu(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                               ],
-                            );
-                         },
-                       );
-                      }
-                    },
+                                       ],
+                                    );
+                                 },
+                               );
+                              }
+                            },
+                          ),
+                    ),
                   ),
               const SizedBox(
-                height: 10,
+                height: 5,
               ),
         ]));
   }

@@ -19,6 +19,7 @@ class AppColors {
   static const Color tertiaryColor = Color(0xFFC8E0F4);
   static const Color textColor = Color(0xFF031927);
   static const Color accentColor = Color(0xFFBA1200);
+  static const Color backgroundColor = Color(0XFFf7f7f7);
 
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFFBA1200), Color(0xFF031927)],

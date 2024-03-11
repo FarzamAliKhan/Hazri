@@ -2,7 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hazri2/global/AppBar.dart';
+import 'package:hazri2/global/styles.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'AttendanceScreen.dart';
 import 'package:intl/intl.dart';
@@ -86,34 +89,16 @@ class _DateListScreenState extends State<DateListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '${widget.RoleType}',
-          style: GoogleFonts.ubuntu(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xff508AA8),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-        ),
-        shadowColor: Colors.blueGrey,
-      ),
+      appBar: const CustomAppBar(title: 'View Attendance'),
       body: FutureBuilder<List>(
         future: fetchDateListFromFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: SpinKitFadingCircle(color: AppColors.secondaryColor,));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data.isEmpty) {
-            return Center(child: Text('No dates found'));
+            return const Center(child: Text('No dates found'));
           } else {
             List dateList = snapshot.data;
             print('datelist: $dateList');
@@ -121,7 +106,7 @@ class _DateListScreenState extends State<DateListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: TableCalendar<Event>(
                     availableCalendarFormats: const {CalendarFormat.month: 'Month'},
                     firstDay: DateTime.utc(2020, 10, 16),
@@ -150,11 +135,11 @@ class _DateListScreenState extends State<DateListScreen> {
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(16.0),
                   child: Text(
-                    "Classes:", // Add your big title here
+                    "Classes:",
                     style: TextStyle(fontWeight: FontWeight.bold,
-                fontSize: 24,),
+                fontSize: 20,),
                   ),
                 ),
                   Expanded(
@@ -170,7 +155,7 @@ class _DateListScreenState extends State<DateListScreen> {
                                 vertical: 4.0,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xff508AA8),
+                                color: AppColors.secondaryColor,
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
                               child: ListTile(

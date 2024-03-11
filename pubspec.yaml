@@ -48,6 +48,8 @@ dependencies:
   tflite_flutter: ^0.10.4  #0.10.4   #0.9.2
   font_awesome_flutter: ^10.4.0
   permission_handler: ^11.0.1
+  flutter_spinkit: ^5.2.0
+
 
   dynamic_table: ^0.0.1-beta
   flutter_editable_table: ^1.1.2
