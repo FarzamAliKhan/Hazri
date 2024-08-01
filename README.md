@@ -9,7 +9,7 @@
 
 </div>
 
-> Flutter app which aims to automate manual attendance marking using `facial recognition` in eduactional institutes. <br>
+> Flutter app which aims to automate manual attendance marking using `facial recognition` in educational institutes. <br>
 > Currently configured for NED University as sample.
 
 > Leave a star 🌟 if you find it useful 🙂
